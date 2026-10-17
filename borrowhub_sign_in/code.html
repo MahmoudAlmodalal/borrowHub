@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html class="h-full" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>استعارة | BorrowHub - تسجيل الدخول</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- IBM Plex Sans Arabic & Inter Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim from Design System -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-container": "#5c3800",
+            "primary-fixed-dim": "#b6c4ff",
+            "surface-container-high": "#e6e8ea",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#001d31",
+            "on-primary": "#ffffff",
+            "error-container": "#ffdad6",
+            "inverse-surface": "#2d3133",
+            "secondary-fixed": "#cce5ff",
+            "tertiary": "#3e2400",
+            "surface-bright": "#f7f9fb",
+            "tertiary-fixed": "#ffddb8",
+            "on-tertiary-container": "#ef9900",
+            "on-error": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-container": "#00476e",
+            "secondary-fixed-dim": "#93ccff",
+            "on-tertiary-fixed": "#2a1700",
+            "on-secondary-fixed-variant": "#004b73",
+            "surface-dim": "#d8dadc",
+            "inverse-on-surface": "#eff1f3",
+            "outline-variant": "#c5c5d3",
+            "surface-tint": "#4059aa",
+            "on-background": "#191c1e",
+            "on-primary-fixed-variant": "#264191",
+            "surface-variant": "#e0e3e5",
+            "on-primary-container": "#90a8ff",
+            "secondary-container": "#5bb8fe",
+            "background": "#f7f9fb",
+            "primary-container": "#1e3a8a",
+            "tertiary-fixed-dim": "#ffb95f",
+            "surface-container-highest": "#e0e3e5",
+            "primary-fixed": "#dce1ff",
+            "outline": "#757682",
+            "on-primary-fixed": "#00164e",
+            "surface": "#f7f9fb",
+            "error": "#ba1a1a",
+            "secondary": "#006398",
+            "on-error-container": "#93000a",
+            "on-tertiary": "#ffffff",
+            "inverse-primary": "#b6c4ff",
+            "on-surface-variant": "#444651",
+            "primary": "#00236f",
+            "on-surface": "#191c1e",
+            "surface-container": "#eceef0",
+            "surface-container-low": "#f2f4f6",
+            "on-tertiary-fixed-variant": "#653e00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "margin": "2rem",
+            "gutter-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "body-sm": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "label-md": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "body-md": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "label-lg": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "body-lg": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "headline-sm": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "headline-md": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "headline-lg": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "headline-lg-mobile": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "display": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "display-mobile": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"]
+          },
+          "fontSize": {
+            "label-sm": ["0.6875rem", { "lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.5", "letterSpacing": "0.005em", "fontWeight": "400" }],
+            "label-md": ["0.75rem", { "lineHeight": "1.25", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["1rem", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-lg": ["0.875rem", { "lineHeight": "1.25", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.65", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.4", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "1.35", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "1.3", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display": ["3rem", { "lineHeight": "1.15", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "display-mobile": ["2rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .academic-bg-pattern {
+      background-color: #F8FAFC;
+      background-image: radial-gradient(#CBD5E1 0.75px, transparent 0.75px), radial-gradient(#E2E8F0 0.75px, #F8FAFC 0.75px);
+      background-size: 30px 30px;
+      background-position: 0 0, 15px 15px;
+    }
+  </style>
+</head>
+<body class="academic-bg-pattern min-h-screen text-on-surface font-body-md text-body-md flex flex-col justify-between antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- Top Global Header / Institutional Bar -->
+<header class="w-full bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/40 sticky top-0 z-40">
+<div class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin py-space-sm flex items-center justify-between">
+<!-- Logo & Brand Anchor -->
+<div class="flex items-center gap-space-sm">
+<img alt="BorrowHub Logo" class="h-9 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wr24Ts5_n0FZQBOWgw5rKO7QzGO-xETRnjMslxRLDS7xgSqrcOJdNm0JX4H41vIi8qF0ztxUnsQSlVWkB-KtpynNAy7jC0dr1dqEZh4YPyFK9bRmAlF1KtZnBRp909EcomLva2ABeoifvCuU7oK21Fep_bb7Oqr9mXfeEoy6ExyeivNIxqwSh2dwp-3PmplazY4wcdd0xf2q99LzevUj8JtfCUhB-rMou-xmwbnjPY4MyPSafUslbNP7c7"/>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight leading-none">
+            استعارة | BorrowHub
+          </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/80">منصة إدارة وحجز التجهيزات الجامعية</span>
+</div>
+</div>
+<!-- Header Center / SSO Trust Badge (Desktop) -->
+<div class="hidden md:flex items-center gap-space-xs bg-surface-container px-space-md py-space-xs rounded-xl border border-outline-variant/30 text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span>بوابة الدخول الجامعي الموحد الموثقة (SSO)</span>
+</div>
+<!-- Language Switcher & Campus Portal Link -->
+<div class="flex items-center gap-space-sm">
+<button class="flex items-center gap-1.5 px-space-sm py-1 rounded-lg border border-outline-variant/60 bg-surface-container-lowest hover:bg-surface-container-low font-label-md text-label-md text-on-surface transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-sm">language</span>
+<span class="font-semibold">English</span>
+</button>
+<div class="h-4 w-px bg-outline-variant/40 hidden sm:block"></div>
+<a class="hidden sm:inline-flex items-center gap-1 font-label-md text-label-md text-secondary hover:underline" href="#help">
+<span class="material-symbols-outlined text-sm">help_outline</span>
+<span>المساعدة</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Main Canvas: Centered High-Density Academic Card -->
+<main class="flex-1 flex items-center justify-center py-space-xl px-margin-mobile sm:px-margin">
+<div class="w-full max-w-lg">
+<!-- Primary Authentication Card Container -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-[0_4px_20px_-2px_rgba(15,23,42,0.06)] p-6 sm:p-8 relative overflow-hidden">
+<!-- Subtle Top Accent Brand Stripe -->
+<div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-primary via-secondary to-primary-container"></div>
+<!-- Card Header: Visual Identity & Welcome Message -->
+<div class="text-center pt-2 pb-5">
+<div class="inline-flex items-center justify-center p-2 rounded-xl bg-surface-container-low border border-outline-variant/40 mb-3 shadow-sm">
+<img alt="BorrowHub Emblem" class="h-12 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wr24Ts5_n0FZQBOWgw5rKO7QzGO-xETRnjMslxRLDS7xgSqrcOJdNm0JX4H41vIi8qF0ztxUnsQSlVWkB-KtpynNAy7jC0dr1dqEZh4YPyFK9bRmAlF1KtZnBRp909EcomLva2ABeoifvCuU7oK21Fep_bb7Oqr9mXfeEoy6ExyeivNIxqwSh2dwp-3PmplazY4wcdd0xf2q99LzevUj8JtfCUhB-rMou-xmwbnjPY4MyPSafUslbNP7c7"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary font-bold tracking-tight">
+            مرحباً بك مجدداً في BorrowHub
+          </h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5 max-w-sm mx-auto leading-relaxed">
+            سجّل دخولك للوصول إلى شبكة استعارة وتتبع المعدات والأجهزة الأكاديمية
+          </p>
+</div>
+<!-- Academic Role Switcher Tab -->
+<div class="mb-5 bg-surface-container-low p-1 rounded-xl flex items-center border border-outline-variant/40">
+<button class="flex-1 py-2 px-space-sm rounded-lg font-label-lg text-label-lg transition-all duration-150 flex items-center justify-center gap-1.5 bg-surface-container-lowest text-primary shadow-sm font-bold" id="role-student-btn" onclick="selectRole('student')" type="button">
+<span class="material-symbols-outlined text-base">school</span>
+<span>طالب / مستعير</span>
+</button>
+<button class="flex-1 py-2 px-space-sm rounded-lg font-label-lg text-label-lg transition-all duration-150 flex items-center justify-center gap-1.5 text-on-surface-variant hover:text-primary" id="role-supervisor-btn" onclick="selectRole('supervisor')" type="button">
+<span class="material-symbols-outlined text-base">engineering</span>
+<span>مشرف معمل / إدارة العُهد</span>
+</button>
+</div>
+<!-- Institutional Pending Approval Notice (Amber Status Alert) -->
+<div class="mb-5 bg-[#FEF3C7] border border-[#FDE68A] rounded-lg p-3.5 flex items-start gap-3 text-[#B45309] shadow-xs" id="status-notice-banner">
+<span class="material-symbols-outlined text-[#B45309] text-xl shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">pending_actions</span>
+<div class="space-y-0.5">
+<div class="font-label-md text-label-md font-bold text-[#92400E] flex items-center gap-1.5">
+<span>حساب قيد المراجعة الإدارية (PENDING_APPROVAL)</span>
+</div>
+<p class="font-body-sm text-body-sm leading-normal text-[#92400E]/90">
+              تنبيه: حسابك قيد المراجعة والتحقق الأكاديمي من قبل إدارة المعامل المركزية، سيتم تفعيل حسابك خلال 24 ساعة.
+            </p>
+</div>
+</div>
+<!-- Validation Error Alert Banner (Interactive Preview State) -->
+<div class="mb-5 bg-error-container/60 border border-error/30 rounded-lg p-3 hidden flex-row items-center gap-2.5 text-on-error-container" id="error-validation-banner">
+<span class="material-symbols-outlined text-error text-lg shrink-0">error</span>
+<span class="font-label-md text-label-md">خطأ في بيانات الاعتماد: يرجى التأكد من صحة البريد الجامعي وكلمة المرور.</span>
+</div>
+<!-- Authentication Form -->
+<form class="space-y-4" id="login-form" onsubmit="handleFormSubmit(event)">
+<!-- Field 1: University Email Address -->
+<div class="space-y-1.5 text-start">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold flex items-center gap-1" for="university-email">
+<span>البريد الإلكتروني الجامعي المعتمد</span>
+<span class="text-error font-bold">*</span>
+</label>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary-fixed/50 px-2 py-0.5 rounded border border-secondary-fixed-dim/50">
+                .edu.sa
+              </span>
+</div>
+<div class="relative rounded-lg shadow-xs">
+<div class="absolute inset-y-0 start-0 pe-1 ps-3 flex items-center pointer-events-none text-on-surface-variant/70">
+<span class="material-symbols-outlined text-xl">alternate_email</span>
+</div>
+<input class="w-full h-10 ps-10 pe-9 bg-surface-container-lowest border border-outline-variant text-on-surface placeholder:text-outline/70 placeholder:text-start rounded-lg font-body-sm text-body-sm focus:border-secondary focus:ring-1 focus:ring-secondary transition-all outline-none" dir="ltr" id="university-email" placeholder="student@university.edu.sa" required="" type="email"/>
+<div class="absolute inset-y-0 end-0 pe-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-base text-[#10B981]" title="نطاق أكاديمي معتمد">verified</span>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant/80">استخدم البريد المعتمد من عمادة تقنية المعلومات.</p>
+</div>
+<!-- Field 2: Password -->
+<div class="space-y-1.5 text-start">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold flex items-center gap-1" for="account-password">
+<span>كلمة المرور</span>
+<span class="text-error font-bold">*</span>
+</label>
+<a class="font-label-md text-label-md text-secondary hover:text-primary hover:underline transition-colors" href="#forgot-password">
+                نسيت كلمة المرور؟
+              </a>
+</div>
+<div class="relative rounded-lg shadow-xs">
+<div class="absolute inset-y-0 start-0 pe-1 ps-3 flex items-center pointer-events-none text-on-surface-variant/70">
+<span class="material-symbols-outlined text-xl">lock</span>
+</div>
+<input class="w-full h-10 ps-10 pe-10 bg-surface-container-lowest border border-outline-variant text-on-surface placeholder:text-outline/70 rounded-lg font-body-sm text-body-sm focus:border-secondary focus:ring-1 focus:ring-secondary transition-all outline-none" id="account-password" placeholder="••••••••••••" required="" type="password"/>
+<!-- Password Visibility Toggle Button -->
+<button aria-label="إظهار أو إخفاء كلمة المرور" class="absolute inset-y-0 end-0 pe-3 flex items-center text-on-surface-variant hover:text-primary focus:outline-none" onclick="togglePasswordVisibility()" type="button">
+<span class="material-symbols-outlined text-xl" id="pwd-visibility-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Field 3: Remember Me & Device Trust -->
+<div class="flex items-center justify-between pt-1">
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<input checked="" class="w-4 h-4 rounded border-outline text-primary-container focus:ring-secondary focus:ring-offset-0 transition-colors" type="checkbox"/>
+<span class="font-label-md text-label-md text-on-surface font-medium">تذكر بيانات الدخول على هذا الجهاز</span>
+</label>
+<div class="flex items-center gap-1 text-on-surface-variant/70 font-label-sm text-label-sm" title="جلسة مشفرة لغاية 30 يوماً">
+<span class="material-symbols-outlined text-xs">lock_clock</span>
+<span>جلسة آمنة</span>
+</div>
+</div>
+<!-- Primary CTA Button: Sign In -->
+<div class="pt-2">
+<button class="w-full h-11 bg-primary-container hover:bg-[#172554] active:scale-[0.99] text-on-primary rounded-lg font-label-lg text-label-lg font-semibold flex items-center justify-center gap-2 shadow-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2" id="submit-btn" type="submit">
+<span id="btn-text">تسجيل الدخول</span>
+<span class="material-symbols-outlined text-lg rtl:rotate-180" id="btn-icon">arrow_forward</span>
+<svg class="animate-spin h-5 w-5 text-white hidden" fill="none" id="btn-spinner" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8v8H4z" fill="currentColor"></path>
+</svg>
+</button>
+</div>
+</form>
+<!-- Divider with Subtle Text -->
+<div class="relative my-6 text-center">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/50"></div>
+</div>
+<span class="relative bg-surface-container-lowest px-3 font-label-sm text-label-sm text-on-surface-variant font-medium">
+            أو عبر خيارات الدخول السريع
+          </span>
+</div>
+<!-- Institutional Single Sign-On (SSO) Quick Access -->
+<div class="space-y-3">
+<button class="w-full h-11 bg-surface-container-low hover:bg-surface-variant border border-outline-variant/70 text-on-surface rounded-lg font-label-lg text-label-lg font-semibold flex items-center justify-center gap-2.5 transition-colors duration-150 focus:ring-2 focus:ring-secondary/40" onclick="simulateSSO()" type="button">
+<span class="material-symbols-outlined text-secondary text-xl">account_balance</span>
+<span>الدخول المباشر عبر النفاذ الوطني / SSO الجامعي الموحد</span>
+</button>
+<!-- Toggle Demo Alert State (Demonstrating error/warning feedback) -->
+<div class="flex items-center justify-center gap-3 pt-1">
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1" onclick="toggleBannerState('amber')" type="button">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span>تبديل تنبيه المراجعة</span>
+</button>
+<span class="text-outline-variant">•</span>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-error transition-colors flex items-center gap-1" onclick="toggleBannerState('error')" type="button">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span>معاينة رسالة الخطأ</span>
+</button>
+</div>
+</div>
+<!-- Secondary Action: Create New Student Account -->
+<div class="mt-6 pt-5 border-t border-outline-variant/40 text-center flex flex-col sm:flex-row items-center justify-center gap-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">ليس لديك حساب مفعل حتى الآن؟</span>
+<a class="font-label-lg text-label-lg text-primary hover:text-secondary font-bold inline-flex items-center gap-1 hover:underline transition-colors" href="#register">
+<span>إنشاء حساب طالب جديد</span>
+<span class="material-symbols-outlined text-sm rtl:rotate-180">north_west</span>
+</a>
+</div>
+</div>
+<!-- Quick Trust Indicators under card -->
+<div class="mt-4 flex flex-wrap items-center justify-around gap-2 px-2 text-on-surface-variant/80 font-label-sm text-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary">security</span>
+<span>حماية تشفير 256-bit TLS</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-[#10B981]">workspace_premium</span>
+<span>اعتماد مجلس المعامل الأكاديمية</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-primary">cloud_done</span>
+<span>مزامنة مباشرة مع سجلات الكلية</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Institutional Trust Footer -->
+<footer class="w-full bg-surface-container-lowest border-t border-outline-variant/40 py-4 mt-auto">
+<div class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-start">
+<!-- Academic Assurance Seal -->
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-base text-secondary">verified</span>
+<span>نظام مشفّر وآمن بنسبة 100% وفق معايير الحرم الجامعي الرقمي</span>
+</div>
+<!-- Footer Policy Links & Technical Support -->
+<div class="flex items-center gap-4 font-label-md text-label-md text-on-surface-variant">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#help-center">
+<span class="material-symbols-outlined text-xs">support_agent</span>
+<span>المساعدة والدعم الفني</span>
+</a>
+<span class="text-outline-variant/60">•</span>
+<a class="hover:text-primary transition-colors" href="#terms">شروط الاستعارة واللوائح</a>
+<span class="text-outline-variant/60">•</span>
+<a class="hover:text-primary transition-colors" href="#privacy">سياسة الخصوصية</a>
+</div>
+</div>
+</footer>
+<!-- Interactive Micro-Interactions Script -->
+<script>
+    // Role Switcher Interaction
+    function selectRole(role) {
+      const studentBtn = document.getElementById('role-student-btn');
+      const supervisorBtn = document.getElementById('role-supervisor-btn');
+      const emailInput = document.getElementById('university-email');
+
+      if (role === 'student') {
+        studentBtn.className = "flex-1 py-2 px-space-sm rounded-lg font-label-lg text-label-lg transition-all duration-150 flex items-center justify-center gap-1.5 bg-surface-container-lowest text-primary shadow-sm font-bold";
+        supervisorBtn.className = "flex-1 py-2 px-space-sm rounded-lg font-label-lg text-label-lg transition-all duration-150 flex items-center justify-center gap-1.5 text-on-surface-variant hover:text-primary";
+        emailInput.placeholder = "student@university.edu.sa";
+      } else {
+        supervisorBtn.className = "flex-1 py-2 px-space-sm rounded-lg font-label-lg text-label-lg transition-all duration-150 flex items-center justify-center gap-1.5 bg-surface-container-lowest text-primary shadow-sm font-bold";
+        studentBtn.className = "flex-1 py-2 px-space-sm rounded-lg font-label-lg text-label-lg transition-all duration-150 flex items-center justify-center gap-1.5 text-on-surface-variant hover:text-primary";
+        emailInput.placeholder = "supervisor.lab@university.edu.sa";
+      }
+    }
+
+    // Toggle Password Visibility
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('account-password');
+      const icon = document.getElementById('pwd-visibility-icon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        passwordInput.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    // Toggle Preview Feedback Banners (Amber review vs Error)
+    function toggleBannerState(type) {
+      const amberNotice = document.getElementById('status-notice-banner');
+      const errorNotice = document.getElementById('error-validation-banner');
+
+      if (type === 'amber') {
+        amberNotice.classList.toggle('hidden');
+      } else if (type === 'error') {
+        errorNotice.classList.toggle('hidden');
+        errorNotice.classList.toggle('flex');
+      }
+    }
+
+    // Form Submission Simulation with Loading Spinner
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnIcon = document.getElementById('btn-icon');
+      const btnSpinner = document.getElementById('btn-spinner');
+
+      // Set Loading State
+      submitBtn.disabled = true;
+      btnText.textContent = "جارٍ التحقق والاتصال بالخادم...";
+      btnIcon.classList.add('hidden');
+      btnSpinner.classList.remove('hidden');
+
+      setTimeout(() => {
+        // Reset state after 1.8s
+        submitBtn.disabled = false;
+        btnText.textContent = "تسجيل الدخول";
+        btnIcon.classList.remove('hidden');
+        btnSpinner.classList.add('hidden');
+      }, 1800);
+    }
+
+    // Quick SSO Simulation
+    function simulateSSO() {
+      const submitBtn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnSpinner = document.getElementById('btn-spinner');
+      const btnIcon = document.getElementById('btn-icon');
+
+      btnText.textContent = "جارٍ التحويل إلى بوابة النفاذ الأكاديمي...";
+      btnIcon.classList.add('hidden');
+      btnSpinner.classList.remove('hidden');
+
+      setTimeout(() => {
+        btnText.textContent = "تسجيل الدخول";
+        btnIcon.classList.remove('hidden');
+        btnSpinner.classList.add('hidden');
+      }, 1500);
+    }
+  </script>
+</body></html>

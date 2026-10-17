@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorrowHub | SCR-09: لوحة إنذارات العتاد المتأخر</title>
+<!-- Material Symbols Outlined Font -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter & IBM Plex Sans Arabic Fonts for Academic Clarity -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#b6c4ff",
+            "on-error-container": "#93000a",
+            "secondary-fixed-dim": "#93ccff",
+            "outline-variant": "#c5c5d3",
+            "surface-container-highest": "#e0e3e5",
+            "on-surface-variant": "#444651",
+            "on-secondary-container": "#00476e",
+            "on-secondary-fixed-variant": "#004b73",
+            "on-primary-container": "#90a8ff",
+            "surface-variant": "#e0e3e5",
+            "on-error": "#ffffff",
+            "surface-container-high": "#e6e8ea",
+            "on-tertiary-container": "#ef9900",
+            "tertiary-fixed-dim": "#ffb95f",
+            "surface-tint": "#4059aa",
+            "tertiary": "#3e2400",
+            "on-primary-fixed-variant": "#264191",
+            "primary-fixed": "#dce1ff",
+            "inverse-on-surface": "#eff1f3",
+            "on-tertiary-fixed": "#2a1700",
+            "on-primary-fixed": "#00164e",
+            "inverse-primary": "#b6c4ff",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed-variant": "#653e00",
+            "on-background": "#191c1e",
+            "secondary": "#006398",
+            "surface-dim": "#d8dadc",
+            "error-container": "#ffdad6",
+            "secondary-fixed": "#cce5ff",
+            "surface-container-lowest": "#ffffff",
+            "inverse-surface": "#2d3133",
+            "on-surface": "#191c1e",
+            "outline": "#757682",
+            "primary-container": "#1e3a8a",
+            "tertiary-fixed": "#ffddb8",
+            "surface-bright": "#f7f9fb",
+            "on-secondary-fixed": "#001d31",
+            "on-tertiary": "#ffffff",
+            "surface": "#f7f9fb",
+            "surface-container": "#eceef0",
+            "secondary-container": "#5bb8fe",
+            "background": "#f7f9fb",
+            "tertiary-container": "#5c3800",
+            "on-secondary": "#ffffff",
+            "surface-container-low": "#f2f4f6",
+            "error": "#ba1a1a",
+            "primary": "#00236f"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2.5rem",
+            "gutter-mobile": "1rem",
+            "margin": "2rem",
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-sm": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "body-md": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "headline-lg": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "display-mobile": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "label-md": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "headline-sm": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "body-sm": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "display": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "body-lg": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "headline-lg-mobile": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "label-lg": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"],
+            "headline-md": ["\"IBM Plex Sans Arabic\", Inter, sans-serif"]
+          },
+          "fontSize": {
+            "label-sm": ["0.6875rem", { "lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "body-md": ["1rem", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-mobile": ["2rem", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["0.75rem", { "lineHeight": "1.25", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.4", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.5", "letterSpacing": "0.005em", "fontWeight": "400" }],
+            "display": ["3rem", { "lineHeight": "1.15", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.65", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "1.3", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-lg": ["0.875rem", { "lineHeight": "1.25", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-md": ["1.5rem", { "lineHeight": "1.35", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
+    }
+    .animate-pulse-subtle {
+      animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen antialiased selection:bg-primary selection:text-on-primary">
+<!-- =========================================================================
+       1. TOP APP BAR (Shared Components: TopNavBar Executed with Precision)
+       ========================================================================= -->
+<header class="bg-surface-container-lowest border-b border-surface-container-high shadow-sm sticky top-0 z-50 w-full h-16 px-6 flex justify-between items-center">
+<!-- Brand Cluster (Right in RTL) -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-3">
+<img alt="BorrowHub Logo" class="h-10 w-10 object-contain rounded-lg" src="https://lh3.googleusercontent.com/aida/AEtjO1Wr24Ts5_n0FZQBOWgw5rKO7QzGO-xETRnjMslxRLDS7xgSqrcOJdNm0JX4H41vIi8qF0ztxUnsQSlVWkB-KtpynNAy7jC0dr1dqEZh4YPyFK9bRmAlF1KtZnBRp909EcomLva2ABeoifvCuU7oK21Fep_bb7Oqr9mXfeEoy6ExyeivNIxqwSh2dwp-3PmplazY4wcdd0xf2q99LzevUj8JtfCUhB-rMou-xmwbnjPY4MyPSafUslbNP7c7"/>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-bold text-primary tracking-tight">BorrowHub | منصة العتاد الجامعي</span>
+<span class="text-label-sm font-label-sm text-outline hidden lg:inline">منصة استعارة وإدارة العتاد والأصول الأكاديمية</span>
+</div>
+</div>
+<div class="hidden xl:flex items-center gap-2 mr-3 px-3 py-1 bg-surface-container-low border border-surface-container-high rounded-lg text-label-md font-label-md text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary text-sm">domain</span>
+<span>المعمل المركزي - كلية علوم الحاسب والذكاء الاصطناعي (مبنى 31 - الدور 2)</span>
+</div>
+</div>
+<!-- Center Navigation Links (TopNavBar array executed) -->
+<nav class="hidden md:flex items-center gap-6 h-full pt-3">
+<a class="text-on-surface-variant hover:text-on-surface pb-2 text-label-md font-label-md transition-colors duration-150" href="#">لوحة التحكم</a>
+<a class="text-on-surface-variant hover:text-on-surface pb-2 text-label-md font-label-md transition-colors duration-150" href="#">شباك التسليم</a>
+<a class="text-on-surface-variant hover:text-on-surface pb-2 text-label-md font-label-md transition-colors duration-150" href="#">إرجاع وفحص العتاد</a>
+<!-- ACTIVE TAB: Overdue Equipment (SCR-09) with Red Alert Count -->
+<a class="border-b-2 border-primary text-primary font-bold pb-2 text-label-md font-label-md flex items-center gap-1.5" href="#">
+<span>العتاد المتأخر</span>
+<span class="bg-error text-on-error text-label-sm font-label-sm px-1.5 py-0.5 rounded-full font-bold">8 متأخرة</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface pb-2 text-label-md font-label-md transition-colors duration-150" href="#">التقارير الأكاديمية</a>
+</nav>
+<!-- Trailing Action & Officer Profile -->
+<div class="flex items-center gap-3">
+<!-- High Priority Alert Badge -->
+<button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-150" title="تنبيهات النظام">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full ring-2 ring-surface-container-lowest animate-ping"></span>
+<span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full ring-2 ring-surface-container-lowest"></span>
+</button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-150 hidden sm:inline-flex" title="مساعدة ودليل النظام">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<!-- System Live Clock & Admin Identity -->
+<div class="h-8 w-px bg-surface-container-high mx-1 hidden sm:block"></div>
+<div class="flex items-center gap-3 pr-2">
+<div class="hidden sm:flex flex-col text-left">
+<span class="text-label-md font-label-md text-on-surface font-semibold text-right">م. عبدالمحسن القحطاني</span>
+<span class="text-label-sm font-label-sm text-outline text-right">أمين المعمل وإدارة العُهد</span>
+</div>
+<img class="w-10 h-10 rounded-full border border-surface-container-high object-cover bg-surface-container" data-alt="Official portrait photograph of an academic Saudi university lab administrator wearing formal ghutra and navy blazer in a modern university computer engineering laboratory, crisp institutional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeWufAMFY8lrp0ttGyBUSpJfc8V_pC25sJt35rJP2lrS-nujr0LKcNY9qy6xp4btyts5mZGl1Wi44zL__L8BsKEl2XvRaKxESs6ied2EhsGe4BGe5bIt1O7ztBs3D64ULPdefKpSsHLomVaYFnnlR5GPQW5FDKkVkPswX3eymzW3qT4Rk7OO8m83K_Y4MfYbmT4TdLK8A97IOWoe243VsH_oDQCZ4Z_7aWRoKQumloHvbJ2SMRLuJZ1A"/>
+</div>
+</div>
+</header>
+<!-- =========================================================================
+       MAIN LAYOUT: SIDE NAV + CANVAS
+       ========================================================================= -->
+<div class="flex min-h-[calc(100vh-4rem)] w-full">
+<!-- 2. SIDE NAVIGATION RAIL (Shared Component: SideNavBar Executed verbatim) -->
+<aside class="hidden lg:flex w-64 h-auto bg-surface-container-lowest border-l border-surface-container-high flex-col justify-between py-6 px-3 shrink-0">
+<div class="space-y-6">
+<!-- Lab Header Identifier -->
+<div class="px-3 pb-4 border-b border-surface-container-high">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary text-2xl">precision_manufacturing</span>
+<div>
+<h2 class="text-label-lg font-label-lg font-bold text-primary">معامل الهندسة والحاسب</h2>
+<p class="text-label-sm font-label-sm text-outline">مشرف المعمل: د. عثمان المنصور</p>
+</div>
+</div>
+<!-- Barcode Quick CTA -->
+<button class="w-full mt-3 bg-primary hover:bg-primary-container text-on-primary text-label-md font-label-md py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-150 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-sm">barcode_scanner</span>
+<span>فحص باركود سريع</span>
+</button>
+</div>
+<!-- Navigation Tab Items -->
+<nav class="space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container hover:text-on-surface transition-colors duration-150 rounded-lg text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined text-lg">assignment_turned_in</span>
+<span>إرجاع وفحص العتاد</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container hover:text-on-surface transition-colors duration-150 rounded-lg text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined text-lg">inventory_2</span>
+<span>قوائم الإعارة النشطة</span>
+</a>
+<!-- ACTIVE TAB: Overdue Equipment and Alerts -->
+<a class="flex items-center justify-between border-r-4 border-primary bg-surface-container-high text-primary font-semibold px-4 py-3 rounded-l-md text-body-sm font-body-sm shadow-sm" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-lg fill text-error">pending_actions</span>
+<span class="font-bold">العتاد المتأخر</span>
+</div>
+<span class="bg-error text-on-error text-label-sm font-label-sm px-2 py-0.5 rounded-full font-bold">8</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container hover:text-on-surface transition-colors duration-150 rounded-lg text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined text-lg">precision_manufacturing</span>
+<span>جرد المعامل والأجهزة</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container hover:text-on-surface transition-colors duration-150 rounded-lg text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined text-lg">build_circle</span>
+<span>تقارير التلف والصيانة</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container hover:text-on-surface transition-colors duration-150 rounded-lg text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+<span>الإعدادات وصلاحيات المعمل</span>
+</a>
+</nav>
+</div>
+<!-- Footer Rail Tabs -->
+<div class="pt-4 border-t border-surface-container-high space-y-1">
+<a class="flex items-center gap-3 text-outline px-4 py-2 hover:bg-surface-container hover:text-on-surface transition-colors duration-150 rounded-lg text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-base">history</span>
+<span>سجل الحركات</span>
+</a>
+<a class="flex items-center gap-3 text-outline px-4 py-2 hover:bg-surface-container hover:text-on-surface transition-colors duration-150 rounded-lg text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-base">menu_book</span>
+<span>دليل الاستخدام</span>
+</a>
+</div>
+</aside>
+<!-- =========================================================================
+         CANVAS CONTENT: SCR-09 لوحة إنذارات العتاد المتأخر
+         ========================================================================= -->
+<main class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto max-w-[1440px] mx-auto w-full space-y-6">
+<!-- Top Urgent Alert Banner -->
+<div class="bg-error-container/40 border-r-4 border-error border-y border-l border-error/20 p-4 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+<div class="flex items-start gap-3">
+<div class="p-2 bg-error text-on-error rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md bg-error text-on-error px-2 py-0.5 rounded font-bold">تنبيه نظامي صارم</span>
+<span class="text-label-sm font-label-sm text-outline">صادر برقم تعميم: ع/ش/ط 1446-88</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-error-container mt-1 font-medium">
+              تنبيه نظامي صادر لعمادة شؤون الطلاب: حظر التسجيل الأكاديمي الفوري وتجميد رصيد الاستعارة لأي طالب يتجاوز تأخيره 5 أيام عن مهلة الـ 10 أيام المعتمدة.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="bg-surface-container-lowest hover:bg-surface-container text-error border border-error/30 text-label-md font-label-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-base">policy</span>
+<span>لائحة المخالفات</span>
+</button>
+</div>
+</div>
+<!-- Header & Page Meta Title -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2 border-b border-surface-container-high">
+<div>
+<div class="flex items-center gap-3">
+<h1 class="text-headline-md font-headline-md font-bold text-primary">لوحة إنذارات العتاد المتأخر (SCR-09)</h1>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-error/10 text-error border border-error/20 font-bold">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse-subtle"></span>
+              مراقبة التخلف الحية
+            </span>
+</div>
+<p class="text-body-sm font-body-sm text-outline mt-0.5">
+            رصد العهد والأجهزة الأكاديمية التي تجاوزت تاريخ الإرجاع النهائي، مع صلاحيات الاتصال الفوري وتجميد القيد وإجراءات الإرجاع السريع للمكتب.
+          </p>
+</div>
+<div class="flex items-center gap-2">
+<button class="bg-surface-container-lowest border border-outline-variant hover:bg-surface-container-low text-on-surface text-label-md font-label-md px-3.5 py-2 rounded-lg flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-base">print</span>
+<span>طباعة تقرير الميدان</span>
+</button>
+<button class="bg-primary hover:bg-primary-container text-on-primary text-label-md font-label-md px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-sm">
+<span class="material-symbols-outlined text-base">sms</span>
+<span>إرسال إنذار SMS جماعي فوري</span>
+</button>
+</div>
+</div>
+<!-- 3. Top High-Contrast Alert KPI Cards (Bento Metric Layout) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Metric 1: Total Overdue Devices -->
+<div class="bg-surface-container-lowest border border-error/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1.5 h-full bg-error"></div>
+<div class="flex items-center justify-between text-outline text-label-md font-label-md mb-2">
+<span>إجمالي الأجهزة المتأخرة</span>
+<span class="material-symbols-outlined text-error text-xl">warning</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-display font-display text-error leading-none">8</span>
+<span class="text-body-sm font-body-sm text-outline">أجهزة محتجزة</span>
+</div>
+<div class="mt-3 flex items-center gap-1.5">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm bg-error/15 text-error px-2 py-0.5 rounded font-bold">
+<span class="material-symbols-outlined text-xs">priority_high</span>
+              منها 3 حالات حرجة &gt; 5 أيام
+            </span>
+</div>
+</div>
+<!-- Metric 2: Estimated Equipment Value -->
+<div class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between text-outline text-label-md font-label-md mb-2">
+<span>القيمة التقديرية للعتاد المحتجز</span>
+<span class="material-symbols-outlined text-secondary text-xl">payments</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-lg font-headline-lg font-bold text-primary leading-none">42,500</span>
+<span class="text-body-sm font-body-sm font-bold text-on-surface">ر.س</span>
+</div>
+<div class="mt-3 flex items-center gap-1.5 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-xs">verified_user</span>
+<span>تأمين العهدة الجامعي ساري ومفعل</span>
+</div>
+</div>
+<!-- Metric 3: Response Rate -->
+<div class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between text-outline text-label-md font-label-md mb-2">
+<span>معدل استجابة الطلاب للإنذار</span>
+<span class="material-symbols-outlined text-on-tertiary-container text-xl">phone_in_talk</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-lg font-headline-lg font-bold text-on-surface leading-none">62.5%</span>
+<span class="text-label-sm font-label-sm text-outline">من الطلاب</span>
+</div>
+<div class="mt-3 flex items-center gap-1 text-label-sm font-label-sm text-outline">
+<span class="text-on-surface font-semibold">تم التواصل مع 5 طلاب اليوم</span>
+<span>عبر الهاتف / SMS</span>
+</div>
+</div>
+<!-- Metric 4: Academic Holds Executed -->
+<div class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between text-outline text-label-md font-label-md mb-2">
+<span>إجراءات تصعيد العمادة المكتملة</span>
+<span class="material-symbols-outlined text-primary text-xl">block</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-lg font-headline-lg font-bold text-primary leading-none">2</span>
+<span class="text-body-sm font-body-sm text-outline">حالات قيد التجميد</span>
+</div>
+<div class="mt-3 flex items-center gap-1 text-label-sm font-label-sm text-error font-medium">
+<span class="material-symbols-outlined text-xs">lock</span>
+<span>تجميد قيد أكاديمي بانتظار الإرجاع</span>
+</div>
+</div>
+</section>
+<!-- 4. Quick Filter & Batch Actions Toolbar -->
+<section class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-4 shadow-sm space-y-3">
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+<!-- Search input -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-outline text-lg">search</span>
+<input class="w-full h-10 pr-10 pl-4 bg-surface-container-low border border-outline-variant focus:border-secondary focus:ring-1 focus:ring-secondary rounded-lg text-body-sm font-body-sm text-on-surface placeholder:text-outline outline-none" placeholder="بحث سريع باسم الطالب، الرقم الجامعي، رقم الجوال، أو كود المعدة..." type="text"/>
+</div>
+<!-- Secondary Batch Actions -->
+<div class="flex items-center gap-2 shrink-0">
+<button class="bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md px-3.5 py-2 rounded-lg flex items-center gap-2 border border-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-base">picture_as_pdf</span>
+<span>تصدير مذكرة إيقاف الخدمات (PDF للعمادة)</span>
+</button>
+<button class="bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md px-3 py-2 rounded-lg flex items-center gap-1 border border-surface-container-high transition-colors" title="خيارات الفرز">
+<span class="material-symbols-outlined text-base">sort</span>
+<span>الأطول تأخيراً</span>
+</button>
+</div>
+</div>
+<!-- Filter Pills Segment -->
+<div class="flex items-center gap-2 overflow-x-auto pt-1">
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md bg-primary text-on-primary font-bold shrink-0 transition-colors">
+            كافة المتأخرات (8)
+          </button>
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md bg-error/10 text-error border border-error/30 font-bold shrink-0 hover:bg-error/20 transition-colors flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span>تأخير حرج (&gt; 5 أيام - 3)</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md bg-surface-container text-on-surface-variant hover:text-on-surface shrink-0 transition-colors">
+            تأخير معتدل (1 - 3 أيام - 4)
+          </button>
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md bg-surface-container text-on-surface-variant hover:text-on-surface shrink-0 transition-colors">
+            قيد التصعيد للشؤون القانونية (1)
+          </button>
+<button class="px-3 py-1.5 rounded-lg text-label-md font-label-md bg-surface-container text-on-surface-variant hover:text-on-surface shrink-0 transition-colors">
+            مشاريع التخرج (سنة 4)
+          </button>
+</div>
+</section>
+<!-- Main Layout: 2 Columns (List 8 Cols + Quick Action Drawer 4 Cols on Desktop) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+<!-- =====================================================================
+             5. High-Contrast Overdue Loans List (8 Columns)
+             ===================================================================== -->
+<section class="xl:col-span-8 space-y-4">
+<!-- Section Heading -->
+<div class="flex items-center justify-between px-1">
+<h3 class="text-headline-sm font-headline-sm font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-error">notification_important</span>
+<span>سجلات الطلاب المتأخرين عن التسليم المعتمد</span>
+</h3>
+<span class="text-label-sm font-label-sm text-outline">تم التحديث التلقائي قبل دقيقتين</span>
+</div>
+<!-- CARD 1: CRITICAL CASE - 7 DAYS OVERDUE -->
+<article class="bg-surface-container-lowest border-2 border-error/40 rounded-xl p-5 shadow-sm relative overflow-hidden transition-all hover:border-error">
+<div class="absolute top-0 right-0 w-2 h-full bg-error"></div>
+<div class="space-y-4 pr-1">
+<!-- Top Row: Student & Overdue Badge -->
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-surface-container-high pb-3">
+<div class="flex items-start gap-3">
+<div class="w-12 h-12 rounded-xl bg-error/10 text-error flex items-center justify-center font-bold text-lg border border-error/20 shrink-0">
+                    ر.د
+                  </div>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<h4 class="text-headline-sm font-headline-sm font-bold text-on-surface">راكان محمد الدوسري</h4>
+<span class="text-label-sm font-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded font-mono">441098231</span>
+<span class="text-label-sm font-label-sm bg-primary/10 text-primary px-2 py-0.5 rounded font-medium">كلية علوم الحاسب - سنة 4 تخرج</span>
+</div>
+<div class="flex items-center gap-3 mt-1.5 text-label-sm font-label-sm text-outline flex-wrap">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">mail</span>
+                        r.aldossari@student.ksu.edu.sa
+                      </span>
+<span class="flex items-center gap-1 text-on-surface font-semibold">
+<span class="material-symbols-outlined text-xs text-secondary">phone_iphone</span>
+                        0501239876
+                      </span>
+</div>
+</div>
+</div>
+<!-- Overdue Status Pulsing Badge -->
+<div class="flex flex-col items-start sm:items-end gap-1 shrink-0">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-error text-on-error text-label-md font-label-md font-bold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+<span>+7 أيام تأخير (حظر أكاديمي نشط)</span>
+</span>
+<span class="text-label-sm font-label-sm text-error font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">gavel</span>
+                    تم رفع إشعار تجميد الحركات الأكاديمية
+                  </span>
+</div>
+</div>
+<!-- Middle Row: Equipment Details & Timeline -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-surface-container-low p-3.5 rounded-lg border border-surface-container-high">
+<div>
+<span class="text-label-sm font-label-sm text-outline block mb-1">العتاد المحتجز والمواصفات:</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">laptop_mac</span>
+<div>
+<span class="text-body-sm font-body-sm font-bold text-on-surface block">محطة عمل محمولة Dell Precision 5570 Workstation</span>
+<span class="text-label-sm font-label-sm text-outline font-mono">S/N: SN-3190-WS-04 | الباركود: #BH-EQ-9041</span>
+</div>
+</div>
+</div>
+<div class="border-t md:border-t-0 md:border-r md:border-surface-container-high pt-2 md:pt-0 md:pr-4 flex flex-col justify-center">
+<span class="text-label-sm font-label-sm text-outline block mb-1">المخطط الزمني للاستعارة:</span>
+<div class="flex items-center justify-between text-label-md font-label-md text-on-surface">
+<span>تاريخ الاستلام: 28 أبريل 2025</span>
+<span class="text-error font-bold">تاريخ الاستحقاق: 8 مايو 2025</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-error h-full w-full rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Bottom Row: Contact Actions & Instant Desk Return Button -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
+<!-- Direct Student Contacts -->
+<div class="flex items-center gap-2 flex-wrap">
+<a class="bg-secondary text-on-secondary hover:bg-on-secondary-container text-label-md font-label-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm" href="tel:0501239876">
+<span class="material-symbols-outlined text-sm">call</span>
+<span>اتصال: 0501239876</span>
+</a>
+<button class="bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm text-error">sms</span>
+<span>إرسال إنذار نهائي SMS</span>
+</button>
+<button class="bg-surface-container hover:bg-surface-container-high text-outline hover:text-on-surface text-label-md font-label-md p-1.5 rounded-lg transition-colors" title="إرسال بريد رسمي">
+<span class="material-symbols-outlined text-sm">mail</span>
+</button>
+</div>
+<!-- DESK RETURN INSTANT ACTIONS (Primary Goal SCR-09) -->
+<div class="flex items-center gap-2">
+<button class="bg-emerald-700 hover:bg-emerald-800 text-white text-label-md font-label-md px-4 py-2 rounded-lg flex items-center gap-1.5 font-bold shadow transition-all active:scale-95" title="إنهاء العهدة فوراً إذا أحضر الطالب الجهاز للمكتب الآن">
+<span class="material-symbols-outlined text-base">check_circle</span>
+<span>إرجاع فوري سليم (Quick Return)</span>
+</button>
+<button class="bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-label-md font-label-md px-2.5 py-2 rounded-lg border border-surface-container-high transition-colors" title="إرجاع مع محضر تلفيات">
+<span class="material-symbols-outlined text-base">report_problem</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<!-- CARD 2: CRITICAL CASE - 6 DAYS OVERDUE -->
+<article class="bg-surface-container-lowest border-2 border-error/40 rounded-xl p-5 shadow-sm relative overflow-hidden transition-all hover:border-error">
+<div class="absolute top-0 right-0 w-2 h-full bg-error"></div>
+<div class="space-y-4 pr-1">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-surface-container-high pb-3">
+<div class="flex items-start gap-3">
+<div class="w-12 h-12 rounded-xl bg-error/10 text-error flex items-center justify-center font-bold text-lg border border-error/20 shrink-0">
+                    ف.ع
+                  </div>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<h4 class="text-headline-sm font-headline-sm font-bold text-on-surface">فهد عبدالعزيز العتيبي</h4>
+<span class="text-label-sm font-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded font-mono">442031189</span>
+<span class="text-label-sm font-label-sm bg-primary/10 text-primary px-2 py-0.5 rounded font-medium">كلية الهندسة - هندسة كهربائية</span>
+</div>
+<div class="flex items-center gap-3 mt-1.5 text-label-sm font-label-sm text-outline flex-wrap">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">mail</span>
+                        f.alotaibi@student.ksu.edu.sa
+                      </span>
+<span class="flex items-center gap-1 text-on-surface font-semibold">
+<span class="material-symbols-outlined text-xs text-secondary">phone_iphone</span>
+                        0554321987
+                      </span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-start sm:items-end gap-1 shrink-0">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-error text-on-error text-label-md font-label-md font-bold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+<span>+6 أيام تأخير</span>
+</span>
+<span class="text-label-sm font-label-sm text-on-tertiary-container font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">pending</span>
+                    متبقي 24 ساعة لرفع الحظر الأكاديمي
+                  </span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-surface-container-low p-3.5 rounded-lg border border-surface-container-high">
+<div>
+<span class="text-label-sm font-label-sm text-outline block mb-1">العتاد المحتجز والمواصفات:</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">speed</span>
+<div>
+<span class="text-body-sm font-body-sm font-bold text-on-surface block">جهاز راسم إشارة رقمي Rigol DS1054Z 50MHz Oscilloscope</span>
+<span class="text-label-sm font-label-sm text-outline font-mono">S/N: SN-5521-OSC-02 | كود: #BH-EQ-4412</span>
+</div>
+</div>
+</div>
+<div class="border-t md:border-t-0 md:border-r md:border-surface-container-high pt-2 md:pt-0 md:pr-4 flex flex-col justify-center">
+<span class="text-label-sm font-label-sm text-outline block mb-1">المخطط الزمني للاستعارة:</span>
+<div class="flex items-center justify-between text-label-md font-label-md text-on-surface">
+<span>تاريخ الاستلام: 29 أبريل 2025</span>
+<span class="text-error font-bold">تاريخ الاستحقاق: 9 مايو 2025</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-error h-full w-full rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
+<div class="flex items-center gap-2 flex-wrap">
+<a class="bg-secondary text-on-secondary hover:bg-on-secondary-container text-label-md font-label-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm" href="tel:0554321987">
+<span class="material-symbols-outlined text-sm">call</span>
+<span>اتصال: 0554321987</span>
+</a>
+<button class="bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">sms</span>
+<span>إرسال تذكير SMS</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="bg-emerald-700 hover:bg-emerald-800 text-white text-label-md font-label-md px-4 py-2 rounded-lg flex items-center gap-1.5 font-bold shadow transition-all active:scale-95">
+<span class="material-symbols-outlined text-base">check_circle</span>
+<span>إرجاع فوري سليم (Quick Return)</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<!-- CARD 3: MODERATE OVERDUE - 3 DAYS -->
+<article class="bg-surface-container-lowest border border-amber-300 rounded-xl p-5 shadow-sm relative overflow-hidden transition-all hover:border-amber-400">
+<div class="absolute top-0 right-0 w-2 h-full bg-amber-500"></div>
+<div class="space-y-4 pr-1">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-surface-container-high pb-3">
+<div class="flex items-start gap-3">
+<div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-lg border border-amber-200 shrink-0">
+                    ز.ش
+                  </div>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<h4 class="text-headline-sm font-headline-sm font-bold text-on-surface">زياد طارق الشريف</h4>
+<span class="text-label-sm font-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded font-mono">443019876</span>
+<span class="text-label-sm font-label-sm bg-surface-container text-on-surface-variant px-2 py-0.5 rounded font-medium">كلية الآداب - إعلام رقمي وإنتاج</span>
+</div>
+<div class="flex items-center gap-3 mt-1.5 text-label-sm font-label-sm text-outline flex-wrap">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">mail</span>
+                        z.alshareef@student.ksu.edu.sa
+                      </span>
+<span class="flex items-center gap-1 text-on-surface font-semibold">
+<span class="material-symbols-outlined text-xs text-secondary">phone_iphone</span>
+                        0533214567
+                      </span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-start sm:items-end gap-1 shrink-0">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-amber-100 text-amber-900 border border-amber-200 text-label-md font-label-md font-bold">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>+3 أيام تأخير (غرامة يومية مسجلة)</span>
+</span>
+<span class="text-label-sm font-label-sm text-outline">غرامة يومية: 20 ر.س / يوم</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-surface-container-low p-3.5 rounded-lg border border-surface-container-high">
+<div>
+<span class="text-label-sm font-label-sm text-outline block mb-1">العتاد المحتجز والمواصفات:</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">photo_camera</span>
+<div>
+<span class="text-body-sm font-body-sm font-bold text-on-surface block">كاميرا سينمائية سوني Sony Alpha A7 IV Kit + عدسة 24-70mm</span>
+<span class="text-label-sm font-label-sm text-outline font-mono">S/N: SN-8842-CAM-03 | كود: #BH-EQ-1198</span>
+</div>
+</div>
+</div>
+<div class="border-t md:border-t-0 md:border-r md:border-surface-container-high pt-2 md:pt-0 md:pr-4 flex flex-col justify-center">
+<span class="text-label-sm font-label-sm text-outline block mb-1">المخطط الزمني للاستعارة:</span>
+<div class="flex items-center justify-between text-label-md font-label-md text-on-surface">
+<span>تاريخ الاستلام: 2 مايو 2025</span>
+<span class="text-amber-800 font-bold">تاريخ الاستحقاق: 12 مايو 2025</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-amber-500 h-full w-4/5 rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
+<div class="flex items-center gap-2 flex-wrap">
+<a class="bg-secondary text-on-secondary hover:bg-on-secondary-container text-label-md font-label-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm" href="tel:0533214567">
+<span class="material-symbols-outlined text-sm">call</span>
+<span>اتصال: 0533214567</span>
+</a>
+<button class="bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">sms</span>
+<span>إرسال إنذار SMS</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="bg-emerald-700 hover:bg-emerald-800 text-white text-label-md font-label-md px-4 py-2 rounded-lg flex items-center gap-1.5 font-bold shadow transition-all active:scale-95">
+<span class="material-symbols-outlined text-base">check_circle</span>
+<span>إرجاع فوري سليم (Quick Return)</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<!-- CARD 4: MODERATE OVERDUE - 2 DAYS -->
+<article class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-5 shadow-sm relative overflow-hidden transition-all hover:border-amber-300">
+<div class="absolute top-0 right-0 w-2 h-full bg-amber-400"></div>
+<div class="space-y-4 pr-1">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-surface-container-high pb-3">
+<div class="flex items-start gap-3">
+<div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center font-bold text-lg border border-amber-200 shrink-0">
+                    م.ت
+                  </div>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<h4 class="text-headline-sm font-headline-sm font-bold text-on-surface">مشاعل خالد التميمي</h4>
+<span class="text-label-sm font-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded font-mono">442099412</span>
+<span class="text-label-sm font-label-sm bg-primary/10 text-primary px-2 py-0.5 rounded font-medium">كلية علوم الحاسب - هندسة حاسب</span>
+</div>
+<div class="flex items-center gap-3 mt-1.5 text-label-sm font-label-sm text-outline flex-wrap">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">mail</span>
+                        m.altamimi@student.ksu.edu.sa
+                      </span>
+<span class="flex items-center gap-1 text-on-surface font-semibold">
+<span class="material-symbols-outlined text-xs text-secondary">phone_iphone</span>
+                        0567788990
+                      </span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-start sm:items-end gap-1 shrink-0">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 text-label-md font-label-md font-bold">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>+2 يوم تأخير</span>
+</span>
+<span class="text-label-sm font-label-sm text-outline">إنذار أولي مرسل</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-surface-container-low p-3.5 rounded-lg border border-surface-container-high">
+<div>
+<span class="text-label-sm font-label-sm text-outline block mb-1">العتاد المحتجز والمواصفات:</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">scanner</span>
+<div>
+<span class="text-body-sm font-body-sm font-bold text-on-surface block">جهاز مسح ليزري ثلاثي الأبعاد EinScan Pro 2X</span>
+<span class="text-label-sm font-label-sm text-outline font-mono">S/N: SN-7703-SCN-01 | كود: #BH-EQ-3091</span>
+</div>
+</div>
+</div>
+<div class="border-t md:border-t-0 md:border-r md:border-surface-container-high pt-2 md:pt-0 md:pr-4 flex flex-col justify-center">
+<span class="text-label-sm font-label-sm text-outline block mb-1">المخطط الزمني للاستعارة:</span>
+<div class="flex items-center justify-between text-label-md font-label-md text-on-surface">
+<span>تاريخ الاستلام: 3 مايو 2025</span>
+<span class="text-amber-800 font-bold">تاريخ الاستحقاق: 13 مايو 2025</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-amber-400 h-full w-2/3 rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
+<div class="flex items-center gap-2 flex-wrap">
+<a class="bg-secondary text-on-secondary hover:bg-on-secondary-container text-label-md font-label-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm" href="tel:0567788990">
+<span class="material-symbols-outlined text-sm">call</span>
+<span>اتصال: 0567788990</span>
+</a>
+<button class="bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">sms</span>
+<span>إرسال تذكير SMS</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="bg-emerald-700 hover:bg-emerald-800 text-white text-label-md font-label-md px-4 py-2 rounded-lg flex items-center gap-1.5 font-bold shadow transition-all active:scale-95">
+<span class="material-symbols-outlined text-base">check_circle</span>
+<span>إرجاع فوري سليم (Quick Return)</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- =====================================================================
+             6. SIDE ESCALATION DRAWER & DESK CALL LOG (4 Columns)
+             ===================================================================== -->
+<aside class="xl:col-span-4 space-y-4">
+<!-- Sticky Desk Communication Panel -->
+<div class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-5 shadow-sm space-y-5 sticky top-20">
+<div class="flex items-center justify-between border-b border-surface-container-high pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">support_agent</span>
+<h3 class="text-label-lg font-label-lg font-bold text-primary">نافذة إجراءات الاتصال والتوثيق المكتبي</h3>
+</div>
+<span class="text-label-sm font-label-sm bg-surface-container px-2 py-0.5 rounded text-outline">حالة نشطة</span>
+</div>
+<!-- Focused Student Card in Drawer -->
+<div class="bg-surface-container-low p-3.5 rounded-lg border border-surface-container-high">
+<span class="text-label-sm font-label-sm text-outline block mb-1">الطالب المختار حالياً للتواصل الفوري:</span>
+<div class="flex items-center justify-between">
+<div>
+<h4 class="text-label-lg font-label-lg font-bold text-on-surface">راكان محمد الدوسري</h4>
+<span class="text-label-sm font-label-sm text-error font-medium">Dell Precision 5570 (+7 أيام)</span>
+</div>
+<a class="p-2.5 bg-secondary text-on-secondary rounded-lg hover:bg-on-secondary-container transition-colors shadow-sm" href="tel:0501239876" title="اتصال مباشر الآن">
+<span class="material-symbols-outlined text-base">phone</span>
+</a>
+</div>
+</div>
+<!-- Field Call & Desk Log History -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<h5 class="text-label-md font-label-md font-bold text-on-surface">سجل المكالمات الميدانية والتوثيق</h5>
+<span class="text-label-sm font-label-sm text-outline">2 مدخلات اليوم</span>
+</div>
+<!-- Log Item 1 -->
+<div class="p-3 bg-surface-container-lowest border-r-2 border-error border-y border-l border-surface-container-high rounded-lg text-body-sm font-body-sm space-y-1">
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">phone_missed</span>
+                    مكالمة اليوم 09:30 ص
+                  </span>
+<span class="text-outline">م. عبدالمحسن</span>
+</div>
+<p class="text-on-surface-variant text-label-md font-label-md">
+                  لم يرد الطالب، تم إرسال رسالة نصية بالمهلة النهائية حتى 02:00 ظهراً لتجنب إيقاف الخدمات الجامعية.
+                </p>
+</div>
+<!-- Log Item 2 -->
+<div class="p-3 bg-surface-container-lowest border-r-2 border-secondary border-y border-l border-surface-container-high rounded-lg text-body-sm font-body-sm space-y-1">
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-secondary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">phone_in_talk</span>
+                    مكالمة أمس 02:15 م
+                  </span>
+<span class="text-outline">د. عثمان</span>
+</div>
+<p class="text-on-surface-variant text-label-md font-label-md">
+                  أفاد بأنه سينهي الاختبار المعملي لمشروع التخرج ويسلم الجهاز خلال اليوم التالي. (تعهد شفهي).
+                </p>
+</div>
+</div>
+<!-- Add Call Log Form -->
+<div class="space-y-2 pt-2 border-t border-surface-container-high">
+<label class="text-label-md font-label-md font-bold text-on-surface block">
+                إضافة ملاحظة اتصال فورية (Call Log Note):
+              </label>
+<textarea class="w-full p-2.5 bg-surface-container-low border border-outline-variant focus:border-secondary focus:ring-1 focus:ring-secondary rounded-lg text-body-sm font-body-sm text-on-surface placeholder:text-outline outline-none resize-none" placeholder="اكتب نتيجة الاتصال الميداني أو إفادة الطالب لتوثيقها في ملفه الأكاديمي..." rows="3"></textarea>
+<button class="w-full bg-secondary hover:bg-on-secondary-container text-on-secondary text-label-md font-label-md py-2 rounded-lg font-bold flex items-center justify-center gap-2 transition-all shadow-sm">
+<span class="material-symbols-outlined text-base">save</span>
+<span>حفظ في ملف الطالب الأكاديمي</span>
+</button>
+</div>
+<!-- Severe Escalation: Report Lost / Academic Billing -->
+<div class="pt-3 border-t border-surface-container-high space-y-2">
+<span class="text-label-sm font-label-sm text-outline block">إجراءات تعذر الوصول للطالب:</span>
+<button class="w-full bg-error-container hover:bg-error/20 text-on-error-container border border-error/30 text-label-md font-label-md py-2 px-3 rounded-lg flex items-center justify-center gap-2 transition-colors font-bold">
+<span class="material-symbols-outlined text-base">assignment_late</span>
+<span>تحويل العهدة إلى "بلاغ فقدان / مطالبة مالية"</span>
+</button>
+</div>
+</div>
+<!-- Academic Policy Quick Guidelines Card -->
+<div class="bg-surface-container-low border border-surface-container-high rounded-xl p-4 text-label-md font-label-md space-y-2">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined text-base">info</span>
+<span>لائحة غرامات التأخير الجامعية (مادة 14)</span>
+</div>
+<p class="text-outline text-label-sm font-label-sm leading-relaxed">
+              تُحتسب غرامة تأخير قدرها 20 ر.س عن كل يوم بعد انتهاء المهلة، وتُجمد نتائج المقررات الدراسية فصلياً حتى سداد الرسوم وإعادة العهدة سليمة للأمين المعتمد.
+            </p>
+</div>
+</aside>
+</div>
+</main>
+</div>
+<!-- =========================================================================
+       7. INSTITUTIONAL FOOTER
+       ========================================================================= -->
+<footer class="bg-surface-container-lowest border-t border-surface-container-high py-4 px-6 text-on-surface-variant text-label-sm font-label-sm">
+<div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">verified</span>
+<span class="font-bold text-on-surface">نظام الرقابة على الأصول الأكاديمية والعهد الطلابية</span>
+<span>— جامعة الملك سعود - عمادة شؤون الطلاب وتقنية المعلومات</span>
+</div>
+<div class="flex items-center gap-6 text-outline">
+<span class="flex items-center gap-1 font-mono">
+<span class="material-symbols-outlined text-xs">terminal</span>
+          Station ID: WS-ENG-LAB31-02
+        </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-emerald-600">lock</span>
+          تشفير الاتصال ساري (TLS 1.3)
+        </span>
+<a class="hover:text-primary transition-colors underline" href="#">لائحة الجزاءات الأكاديمية والمالية</a>
+</div>
+</div>
+</footer>
+<!-- Micro-interaction Script for Quick Return simulation -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const quickReturnBtns = document.querySelectorAll('button:has(span:contains("Quick Return")), button:contains("إرجاع فوري سليم")');
+      
+      // Accessible notification feedback for the lab officer
+      window.handleQuickReturn = function(studentName, equipmentName) {
+        if (confirm(`تأكيد استلام وفحص: ${equipmentName} من الطالب: ${studentName}؟\nسيتم فك الحظر الأكاديمي وإلغاء الإنذار فوراً.`)) {
+          alert('تم تسجيل إرجاع العهدة بنجاح، وتحديث سجل الطالب في البوابة الأكاديمية.');
+        }
+      };
+    });
+  </script>
+</body></html>

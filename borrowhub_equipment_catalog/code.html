@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background text-on-surface" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>استعارة | BorrowHub - كتالوج المعدات والأجهزة الأكاديمية</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#444651",
+            "inverse-primary": "#b6c4ff",
+            "primary-container": "#1e3a8a",
+            "tertiary-fixed": "#ffddb8",
+            "on-tertiary-fixed-variant": "#653e00",
+            "tertiary-container": "#5c3800",
+            "background": "#f7f9fb",
+            "secondary": "#006398",
+            "primary": "#00236f",
+            "surface": "#f7f9fb",
+            "on-tertiary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#d8dadc",
+            "primary-fixed": "#dce1ff",
+            "tertiary-fixed-dim": "#ffb95f",
+            "surface-variant": "#e0e3e5",
+            "surface-tint": "#4059aa",
+            "secondary-fixed": "#cce5ff",
+            "on-secondary-container": "#00476e",
+            "on-primary-fixed": "#00164e",
+            "on-primary-fixed-variant": "#264191",
+            "surface-container-highest": "#e0e3e5",
+            "on-surface": "#191c1e",
+            "surface-container-high": "#e6e8ea",
+            "tertiary": "#3e2400",
+            "outline": "#757682",
+            "secondary-container": "#5bb8fe",
+            "on-tertiary-container": "#ef9900",
+            "on-primary-container": "#90a8ff",
+            "inverse-on-surface": "#eff1f3",
+            "on-error-container": "#93000a",
+            "on-primary": "#ffffff",
+            "surface-container": "#eceef0",
+            "on-secondary-fixed": "#001d31",
+            "surface-container-low": "#f2f4f6",
+            "inverse-surface": "#2d3133",
+            "secondary-fixed-dim": "#93ccff",
+            "primary-fixed-dim": "#b6c4ff",
+            "on-tertiary-fixed": "#2a1700",
+            "on-secondary-fixed-variant": "#004b73",
+            "error": "#ba1a1a",
+            "outline-variant": "#c5c5d3",
+            "on-background": "#191c1e",
+            "surface-bright": "#f7f9fb",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6"
+          },
+          borderRadius: {
+            DEFAULT: "0.125rem",
+            lg: "0.25rem",
+            xl: "0.5rem",
+            full: "0.75rem"
+          },
+          spacing: {
+            "gutter-mobile": "1rem",
+            "space-xl": "2.5rem",
+            "margin": "2rem",
+            "margin-mobile": "1rem",
+            "space-md": "1rem",
+            "gutter": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem"
+          },
+          fontFamily: {
+            "headline-lg-mobile": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "display": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "headline-md": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "label-md": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "label-sm": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "headline-sm": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "body-lg": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "body-md": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "display-mobile": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "body-sm": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "headline-lg": ["\"IBM Plex Sans Arabic\", sans-serif"],
+            "label-lg": ["\"IBM Plex Sans Arabic\", sans-serif"]
+          },
+          fontSize: {
+            "headline-lg-mobile": ["1.75rem", { lineHeight: "1.3", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "display": ["3rem", { lineHeight: "1.15", letterSpacing: "-0.025em", fontWeight: "700" }],
+            "headline-md": ["1.5rem", { lineHeight: "1.35", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "label-md": ["0.75rem", { lineHeight: "1.25", letterSpacing: "0.02em", fontWeight: "600" }],
+            "label-sm": ["0.6875rem", { lineHeight: "1.2", letterSpacing: "0.03em", fontWeight: "600" }],
+            "headline-sm": ["1.25rem", { lineHeight: "1.4", letterSpacing: "-0.005em", fontWeight: "600" }],
+            "body-lg": ["1.125rem", { lineHeight: "1.65", letterSpacing: "0em", fontWeight: "400" }],
+            "body-md": ["1rem", { lineHeight: "1.6", letterSpacing: "0em", fontWeight: "400" }],
+            "display-mobile": ["2rem", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "body-sm": ["0.875rem", { lineHeight: "1.5", letterSpacing: "0.005em", fontWeight: "400" }],
+            "headline-lg": ["2.25rem", { lineHeight: "1.25", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "label-lg": ["0.875rem", { lineHeight: "1.25", letterSpacing: "0.01em", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1;
+    }
+    /* Custom scrollbar for academic focus */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-background text-on-surface antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- Top Navigation Bar (Shared Anchor Blueprint) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface shadow-sm sticky top-0 z-40 border-b border-outline-variant/30">
+<div class="flex items-center justify-between px- margin py- space-sm max-w-[1440px] mx-auto w-full rtl px-4 sm:px-6 lg:px-8">
+<!-- Brand & Search Left Cluster -->
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-3 group" href="#">
+<img alt="BorrowHub Logo" class="w-10 h-10 object-contain rounded-lg p-0.5 bg-surface-container-lowest border border-outline-variant/40 shadow-xs transition-transform group-hover:scale-105 duration-150" src="https://lh3.googleusercontent.com/aida/AEtjO1Wr24Ts5_n0FZQBOWgw5rKO7QzGO-xETRnjMslxRLDS7xgSqrcOJdNm0JX4H41vIi8qF0ztxUnsQSlVWkB-KtpynNAy7jC0dr1dqEZh4YPyFK9bRmAlF1KtZnBRp909EcomLva2ABeoifvCuU7oK21Fep_bb7Oqr9mXfeEoy6ExyeivNIxqwSh2dwp-3PmplazY4wcdd0xf2q99LzevUj8JtfCUhB-rMou-xmwbnjPY4MyPSafUslbNP7c7"/>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary leading-tight">استعارة | BorrowHub</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant hidden sm:inline-block">منصة إعارة وتجهيزات المعامل الأكاديمية</span>
+</div>
+</a>
+<!-- Global Quick Search Bar -->
+<div class="relative hidden xl:block w-72">
+<input class="w-full h-10 pr-9 pl-4 text-body-sm font-body-sm bg-surface-container-low border border-outline-variant/60 rounded-lg focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="بحث عام في المستودع الأكاديمي..." type="text"/>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-[20px]">search</span>
+</div>
+</div>
+<!-- Navigation Links (Active state determined autonomously: الكتالوج) -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant dark:text-outline-variant font-label-md text-label-md pb-1 hover:text-primary transition-colors duration-150" href="#">الرئيسية</a>
+<a class="text-primary dark:text-secondary-fixed border-b-2 border-primary dark:border-secondary-fixed font-label-lg text-label-lg pb-1" href="#">الكتالوج</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-label-md text-label-md pb-1 hover:text-primary transition-colors duration-150" href="#">استعاراتي</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-label-md text-label-md pb-1 hover:text-primary transition-colors duration-150" href="#">طلباتي</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-label-md text-label-md pb-1 hover:text-primary transition-colors duration-150" href="#">المساعدة</a>
+</nav>
+<!-- Trailing Identity & Student Verification Cluster -->
+<div class="flex items-center gap-3">
+<!-- New Item CTA -->
+<button class="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 text-label-md font-label-md bg-primary-container text-on-primary rounded-lg hover:bg-primary transition-all duration-150 active:scale-95 shadow-xs">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>+ أضف غرضاً للإعارة</span>
+</button>
+<!-- Notification Bell with Count -->
+<div class="relative">
+<button aria-label="الإشعارات" class="w-9 h-9 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+</button>
+<span class="absolute top-1 left-1 w-4 h-4 bg-error text-on-error rounded-full text-[10px] flex items-center justify-center font-bold">2</span>
+</div>
+<!-- Bookmarks -->
+<button aria-label="المحفوظات" class="hidden sm:flex w-9 h-9 items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[22px]">bookmark</span>
+</button>
+<!-- Divider -->
+<div class="h-6 w-px bg-outline-variant/40 hidden sm:block"></div>
+<!-- Student Profile Pill (Verified) -->
+<div class="flex items-center gap-2.5 bg-surface-container-low hover:bg-surface-container-high/60 transition-colors py-1 px-2.5 rounded-lg border border-outline-variant/40">
+<div class="relative">
+<div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-primary text-label-sm">
+              س ش
+            </div>
+<span class="material-symbols-outlined fill-icon absolute -bottom-1 -left-1 text-secondary text-[14px] bg-white rounded-full" title="حساب جامعي موثق">verified</span>
+</div>
+<div class="flex flex-col text-right hidden sm:block">
+<div class="flex items-center gap-1">
+<span class="text-label-md font-label-md text-on-surface">سلمان الشمري</span>
+<span class="inline-block text-[10px] font-semibold px-1.5 py-0.2 bg-secondary-fixed text-on-secondary-fixed rounded-sm">موثق</span>
+</div>
+<span class="text-[11px] text-on-surface-variant">هندسة البرمجيات • س 4</span>
+</div>
+</div>
+<!-- Language Switcher Pill -->
+<button class="px-2 py-1 text-label-sm font-label-sm border border-outline-variant/60 rounded-lg text-on-surface-variant hover:text-primary transition-colors">
+          EN
+        </button>
+</div>
+</div>
+</header>
+<!-- Main Container -->
+<main class="flex-grow max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+<!-- Catalog Sub-header & Live Search Filter Section -->
+<section class="bg-surface-container-lowest border border-outline-variant/50 rounded-xl p-6 sm:p-8 shadow-xs">
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-outline-variant/30">
+<div class="space-y-2 max-w-3xl">
+<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-secondary-fixed/50 text-on-secondary-fixed text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]">domain_verification</span>
+<span>مستودع الكليات والمعامل المعتمدة • الفصل الأكاديمي الحالي</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-primary tracking-tight">كتالوج المعدات والأجهزة الأكاديمية</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">
+            تصفح واحجز الأجهزة المعملية، الكاميرات المتخصصة، والأدوات الهندسية لمشاريعك الأكاديمية بكل سهولة وموثوقية، تحت مظلة لوائح الإعارة الطلابية الموحدة.
+          </p>
+</div>
+<!-- Live Availability Counter Card -->
+<div class="flex items-center gap-3 bg-surface-container-low px-4 py-3 rounded-lg border border-outline-variant/60 shrink-0">
+<div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+<div class="text-right">
+<span class="text-headline-sm font-headline-sm text-primary font-bold">24 معدة</span>
+<span class="block text-label-sm font-label-sm text-on-surface-variant">متاحة للحجز الفوري اليوم</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-[26px] mr-2">precision_manufacturing</span>
+</div>
+</div>
+<!-- Search Controls Bar -->
+<div class="pt-6 space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+<!-- Large Search Input -->
+<div class="md:col-span-6 relative">
+<input class="w-full h-11 pr-11 pl-4 text-body-md font-body-md bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" id="catalog-search" placeholder="ابحث باسم الجهاز، الطراز، أو معمل الكلية (مثال: Sony A7 IV، راسم إشارة)..." type="text"/>
+<span class="material-symbols-outlined absolute right-3.5 top-2.5 text-outline text-[22px]">search</span>
+</div>
+<!-- Secondary Filters Dropdowns -->
+<div class="md:col-span-6 flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+<!-- Lab Filter -->
+<div class="w-full sm:w-1/3">
+<label class="sr-only">فلتر المعمل</label>
+<select class="w-full h-11 px-3 text-label-md font-label-md bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface focus:outline-none focus:border-secondary">
+<option value="">جميع المعامل المركزية</option>
+<option value="media">استوديو الإعلام (مبنى 31)</option>
+<option value="eng">معمل النظم المدمجة (مبنى 22)</option>
+<option value="cs">معمل أبحاث الذكاء والحاسب</option>
+<option value="maker">ورشة التصنيع الرقمي (FabLab)</option>
+</select>
+</div>
+<!-- Availability Filter -->
+<div class="w-full sm:w-1/3">
+<label class="sr-only">حالة التوفر</label>
+<select class="w-full h-11 px-3 text-label-md font-label-md bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface focus:outline-none focus:border-secondary">
+<option value="all">كل حالات التوفر</option>
+<option selected="" value="avail">متوفر فقط (جاهز للاستلام)</option>
+<option value="booked">محجوز مع تاريخ إتاحة قريب</option>
+</select>
+</div>
+<!-- Sort By -->
+<div class="w-full sm:w-1/3">
+<label class="sr-only">الترتيب</label>
+<select class="w-full h-11 px-3 text-label-md font-label-md bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface focus:outline-none focus:border-secondary">
+<option value="recent">الأحدث إضافة</option>
+<option value="popular">الأكثر طلباً بين الطلاب</option>
+<option value="duration">أطول مدة إعارة</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Category Filter Pills -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 pt-2 no-scrollbar">
+<button class="shrink-0 px-4 py-2 rounded-lg text-label-md font-label-md bg-primary text-on-primary transition-all duration-150 shadow-xs flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">apps</span>
+<span>الكل (68)</span>
+</button>
+<button class="shrink-0 px-4 py-2 rounded-lg text-label-md font-label-md bg-surface-container-low hover:bg-surface-container-high border border-outline-variant/40 text-on-surface transition-all duration-150 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">photo_camera</span>
+<span>كاميرات ومعدات تصوير (14)</span>
+</button>
+<button class="shrink-0 px-4 py-2 rounded-lg text-label-md font-label-md bg-surface-container-low hover:bg-surface-container-high border border-outline-variant/40 text-on-surface transition-all duration-150 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">laptop_mac</span>
+<span>حواسب ومحطات عمل (18)</span>
+</button>
+<button class="shrink-0 px-4 py-2 rounded-lg text-label-md font-label-md bg-surface-container-low hover:bg-surface-container-high border border-outline-variant/40 text-on-surface transition-all duration-150 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">precision_manufacturing</span>
+<span>أدوات قياس وهندسة (12)</span>
+</button>
+<button class="shrink-0 px-4 py-2 rounded-lg text-label-md font-label-md bg-surface-container-low hover:bg-surface-container-high border border-outline-variant/40 text-on-surface transition-all duration-150 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">videocam</span>
+<span>أجهزة عرض وصوتيات (9)</span>
+</button>
+<button class="shrink-0 px-4 py-2 rounded-lg text-label-md font-label-md bg-surface-container-low hover:bg-surface-container-high border border-outline-variant/40 text-on-surface transition-all duration-150 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">memory</span>
+<span>أطقم معامل إلكترونية (15)</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Interactive Workspace: Catalog Grid & Live Request Dialog Showcase -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- Catalog Grid: 3-4 Column on Desktop / Bento Style Flow (lg:col-span-8 or 7 depending on dialog prominence) -->
+<section class="lg:col-span-7 xl:col-span-8 space-y-6">
+<!-- Quick stats summary bar above cards -->
+<div class="flex items-center justify-between text-label-md font-label-md text-on-surface-variant px-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">tune</span>
+<span>تصفية بحسب: كافة التخصصات الهندسية والإعلامية</span>
+</div>
+<div class="flex items-center gap-1 text-primary cursor-pointer hover:underline">
+<span>تحديث القائمة التلقائي</span>
+<span class="material-symbols-outlined text-[16px]">sync</span>
+</div>
+</div>
+<!-- Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+<!-- Card 1: Featured / Highlighted Sony Alpha A7 IV (Trigger for modal showcase) -->
+<article class="bg-surface-container-lowest border-2 border-secondary rounded-xl overflow-hidden shadow-md flex flex-col justify-between transition-all duration-200 hover:shadow-lg relative group">
+<div class="absolute top-3 right-3 z-10 flex gap-1">
+<span class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-semibold rounded-md border border-outline-variant/40 shadow-xs">
+                كاميرات رقمية
+              </span>
+</div>
+<div class="relative h-44 bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Professional mirrorless Sony camera body with a 24-70mm GM lens resting on a clean white laboratory table with academic lighting, subtle blue ambient accents, highly disciplined minimalist composition with sharp technical clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwuEFVvhX6UBmLJZ9sQmoW5cmu_oS8wGeZ3U0sePh2xm3kknoqE1gi83EOAbeHxImwJxurVUj1WSvmVosxOWHboRnGxqq4fJ_tUnIPTYHpUmZz8YLl2d6ydMGXxHNyNznciR-R-ew9fFqhAUKzbJQiFKO_3tOBStNLMrvLvhlvQraLWSuiqV6ldraslHYrzf1jKKOouUGDnMHmGgm3GleOFNt7Nf3olveYv4bqkSgKk1NqNo3yFBX1Ig"/>
+<div class="absolute bottom-2.5 right-2.5 bg-emerald-700 text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow-xs flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+<span>متوفر (3 وحدات متاحة)</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow justify-between space-y-3">
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline mb-1">
+<span>#EQ-8842</span>
+<span class="flex items-center gap-0.5 text-amber-700">
+<span class="material-symbols-outlined fill-icon text-[14px]">star</span>
+<span>4.9 (24 تقييم)</span>
+</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary group-hover:text-secondary transition-colors font-bold leading-snug">
+                  كاميرا Sony Alpha A7 IV مع عدسة 24-70mm GM
+                </h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mt-1">
+                  مخصصة لمشاريع التخرج الإعلامية وتوثيق الأبحاث البصرية المعملية مع بطاريتين إضافيتين وحقيبة مقاومة للصدمات.
+                </p>
+</div>
+<!-- Metadata & Policy -->
+<div class="space-y-2 pt-2 border-t border-outline-variant/30 text-label-sm font-label-sm">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-outline">location_on</span>
+<span>معمل الوسائط المتعددة (مبنى 31 - الدور 2)</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low p-2 rounded">
+<span>أقصى مدة: 10 أيام</span>
+<span class="text-secondary font-semibold">مجاني للأغراض الأكاديمية</span>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full py-2.5 px-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container transition-all flex items-center justify-center gap-1.5 shadow-xs active:scale-95" onclick="document.getElementById('loan-request-modal').scrollIntoView({behavior: 'smooth'})">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+<span>طلب استعارة الآن</span>
+</button>
+</div>
+</article>
+<!-- Card 2: Dell Precision 5570 Mobile Workstation -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:border-secondary/40 relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-semibold rounded-md border border-outline-variant/40 shadow-xs">
+                حواسب محمولة
+              </span>
+</div>
+<div class="relative h-44 bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Modern high performance mobile engineering workstation laptop open on a sleek studio desk showing CAD blueprints on the screen with crisp lighting and academic clean minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxTUeTJ0Ki5nyvJ-tbfcl0zqZsS7_UaagqOYodEAka-SCzte-vZ-6VwEBIOcvlJwNXruN6a3TpurTq9ZdbrDBZM-BUfiGp91I7cII--05MW833fcUOBD8T1uUjUe4CWSXrVchLNMwCM5ce2zRw6EHivUBmuLtZbauYBkU4zDzxppwkYUV5HFSXrMOlDnjTEtJbNYiRVr8VbLJFvN-qcjkvsDChPgST3CNoQmdXu9SG6PHLOQAj84lZ_g"/>
+<div class="absolute bottom-2.5 right-2.5 bg-emerald-700 text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow-xs flex items-center gap-1">
+<span>متوفر (1 وحدة متاحة)</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow justify-between space-y-3">
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline mb-1">
+<span>#EQ-3190</span>
+<span class="text-on-surface-variant text-[11px]">Intel i9 • 64GB RAM</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold leading-snug">
+                  محطة عمل متنقلة Dell Precision 5570
+                </h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mt-1">
+                  مجهزة ببرامج المحاكاة الهندسية ANSYS و SolidWorks ومكتبات Deep Learning للتدريب والتصميم المعقد.
+                </p>
+</div>
+<div class="space-y-2 pt-2 border-t border-outline-variant/30 text-label-sm font-label-sm">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-outline">location_on</span>
+<span>معمل الحوسبة المتقدمة (مبنى 14)</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low p-2 rounded">
+<span>أقصى مدة: 7 أيام</span>
+<span class="text-secondary font-semibold">مجاني للأغراض الأكاديمية</span>
+</div>
+</div>
+<button class="w-full py-2.5 px-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container transition-all flex items-center justify-center gap-1.5 shadow-xs active:scale-95">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+<span>طلب استعارة</span>
+</button>
+</div>
+</article>
+<!-- Card 3: Rigol Digital Oscilloscope -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:border-secondary/40 relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-semibold rounded-md border border-outline-variant/40 shadow-xs">
+                أدوات قياس دقيقة
+              </span>
+</div>
+<div class="relative h-44 bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Digital oscilloscope instrument on an electrical engineering lab workbench showing sine wave waveforms on display with high tech probes and electronic measurement equipment in high focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPDx8wC2642l0mYLjqynmZ06bEkcdp3aygXpkkM1VeOQim-oYJuFr3YrxVWQ-5dZFywlZ0kh6c-GshxDGeukeMC2tCHwTGnB0cukHNbDMsjKheWGkeghdAWF7JF-tiMdTSl91gmah9YnHSUyhjpBupXeft77F8md6zVsOb18kpdnQ08h7ZMAq2csSv11FgD7J3nhMReFTAHWEPhIvLQm27mO0C5AsuwWlGO-C-eHP6MVzoHbxQ_6Urkg"/>
+<div class="absolute bottom-2.5 right-2.5 bg-emerald-700 text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow-xs flex items-center gap-1">
+<span>متوفر (5 وحدات متاحة)</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow justify-between space-y-3">
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline mb-1">
+<span>#EQ-5521</span>
+<span class="text-on-surface-variant text-[11px]">4 قنوات • 50MHz</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold leading-snug">
+                  راسم إشارة رقمي Rigol DS1054Z 50MHz
+                </h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mt-1">
+                  لقياس الإشارات الكهرومغناطيسية والدوائر المتكاملة لمقررات هندسة الاتصالات والإلكترونيات.
+                </p>
+</div>
+<div class="space-y-2 pt-2 border-t border-outline-variant/30 text-label-sm font-label-sm">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-outline">location_on</span>
+<span>معمل الإلكترونيات التناظرية (مبنى 22)</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low p-2 rounded">
+<span>أقصى مدة: 14 يوماً</span>
+<span class="text-secondary font-semibold">مجاني للأغراض الأكاديمية</span>
+</div>
+</div>
+<button class="w-full py-2.5 px-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container transition-all flex items-center justify-center gap-1.5 shadow-xs active:scale-95">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+<span>طلب استعارة</span>
+</button>
+</div>
+</article>
+<!-- Card 4: Arduino & Raspberry Pi Lab Kit -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:border-secondary/40 relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-semibold rounded-md border border-outline-variant/40 shadow-xs">
+                أطقم معامل إلكترونية
+              </span>
+</div>
+<div class="relative h-44 bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Organized electronics development kit box containing Raspberry Pi 4 board, Arduino modules, sensors, breadboard and jumper cables on an academic workshop table with soft white lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXUuJYCxYcZElWMAxErWCTp3QONW_M4nDdiE56lI_4RlMTGzCKC07Vwz4EkpXZ3ia-MsK5Lht55zrSaDaQPn3tOXePBl6a4h08lpBnrdsWRUQbyFSkJ1urG2PILd85XtK6dYnwRsz0jaPb7De5wywJHolhUFzcVGOUhUy-ejlXCIkDighnOL1OeAJdMp9a2VLiqFplBY6-v8ifnAp2beIy4tz_YvVziqPniHtjV0UpCRxLNqNPhNfmgw"/>
+<div class="absolute bottom-2.5 right-2.5 bg-emerald-700 text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow-xs flex items-center gap-1">
+<span>متوفر (8 أطقم)</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow justify-between space-y-3">
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline mb-1">
+<span>#EQ-1109</span>
+<span class="text-on-surface-variant text-[11px]">IoT &amp; Embedded</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold leading-snug">
+                  طقم تطوير Arduino &amp; Raspberry Pi 4 Lab Kit
+                </h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mt-1">
+                  حقيبة شاملة تضم حساسات بيئية وشاشات OLED ولوحة تحكم متقدمة لمشاريع إنترنت الأشياء والروبوتات.
+                </p>
+</div>
+<div class="space-y-2 pt-2 border-t border-outline-variant/30 text-label-sm font-label-sm">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-outline">location_on</span>
+<span>معمل النظم المدمجة (مبنى 22 - الدور 1)</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low p-2 rounded">
+<span>أقصى مدة: 10 أيام</span>
+<span class="text-secondary font-semibold">مجاني للأغراض الأكاديمية</span>
+</div>
+</div>
+<button class="w-full py-2.5 px-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container transition-all flex items-center justify-center gap-1.5 shadow-xs active:scale-95">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+<span>طلب استعارة</span>
+</button>
+</div>
+</article>
+<!-- Card 5: Creality 3D Printer (Unavailable / Booked State Showcase) -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between opacity-85 hover:opacity-100 transition-all duration-200 relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface-variant font-semibold rounded-md border border-outline-variant/40 shadow-xs">
+                تصنيع رقمي
+              </span>
+</div>
+<div class="relative h-44 bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover grayscale-[30%]" data-alt="Precision 3D printer creating a mechanical prototype inside a modern engineering makerspace studio with industrial precision tools and clear academic illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBUSLT5vLz0sMfp_NxHluQGu-u3A_ObZ7KL62Zj_LBV3lklZKuwzFEbjcxwZVtRJTGe6fTdjZhUiSXmowSOIXbPNPM0--Pvwkv4i57axCGL_pUzHA-aUxmEn5fNpfBC2gowXS7D0C38VGr6gwOTbklF_vzru5lGPE6y7vRbDn5dHsRLCw1TgcnrkElcoHqOKhORjqBJMbB-Y70jQRvNChaYXMYLVdEOh-nA6bozw1wgoO03mnuT11bNg"/>
+<div class="absolute bottom-2.5 right-2.5 bg-outline text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">schedule</span>
+<span>محجوز بالكامل (متاح بعد 3 أيام)</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow justify-between space-y-3">
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline mb-1">
+<span>#EQ-4410</span>
+<span class="text-on-surface-variant text-[11px]">Direct Drive • CR-Touch</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold leading-snug">
+                  طابعة ثلاثية الأبعاد Creality Ender 3 S1 Pro
+                </h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mt-1">
+                  طباعة النماذج الأولية بمواد PLA/PETG لمشاريع التصميم الصناعي والهندسة الميكانيكية.
+                </p>
+</div>
+<div class="space-y-2 pt-2 border-t border-outline-variant/30 text-label-sm font-label-sm">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-outline">location_on</span>
+<span>ورشة التصنيع الرقمي (FabLab مبنى 19)</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low p-2 rounded">
+<span>أقصى مدة: 5 أيام</span>
+<span class="text-amber-800 font-semibold">حجز مسبق بالقائمة</span>
+</div>
+</div>
+<!-- Disabled Button -->
+<button class="w-full py-2.5 px-4 bg-surface-container-high text-outline cursor-not-allowed font-label-md text-label-md rounded-lg flex items-center justify-center gap-1.5" disabled="">
+<span class="material-symbols-outlined text-[18px]">event_busy</span>
+<span>غير متوفر حالياً (حجز مسبق)</span>
+</button>
+</div>
+</article>
+<!-- Card 6: 3D Laser Scanner -->
+<article class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:border-secondary/40 relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-semibold rounded-md border border-outline-variant/40 shadow-xs">
+                مسح ليزري وقياس
+              </span>
+</div>
+<div class="relative h-44 bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Handheld modern 3D laser scanner device on a specialized calibration stand inside an architecture and engineering laboratory with blue and white precision instruments." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOvtmomah0UiquUa8CuMO2csgS9F53aUVklvM-Nc0ZCfPgF_Ew6mrNUgNv9DRgO7x_JZ5oXSkL0YgUY9S7llxocwW544oPPz5G7DhoIC3TCx5gmYEmrVCykwg_SnYrEqo6P0Hkm_ZK1AiypZJdcCBBWQcmh2-QCNjATpExk1STkEqXptG2hwDk3D6d-N2XMNN9ju2uR1jaOUN0jurzvcT-5eipRhWO0dgxSlufigsKB_P4hho8mgKOMQ"/>
+<div class="absolute bottom-2.5 right-2.5 bg-emerald-700 text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow-xs flex items-center gap-1">
+<span>متوفر (2 وحدتان)</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow justify-between space-y-3">
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline mb-1">
+<span>#EQ-7703</span>
+<span class="text-on-surface-variant text-[11px]">دقة 0.04 ملم</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold leading-snug">
+                  جهاز مسح ليزري ثلاثي الأبعاد EinScan Pro 2X
+                </h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mt-1">
+                  لرقمنة القطع الفيزيائية وإجراء الهندسة العكسية لمشاريع المعمار والعمارة الداخلية وتصميم المنتجات.
+                </p>
+</div>
+<div class="space-y-2 pt-2 border-t border-outline-variant/30 text-label-sm font-label-sm">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-outline">location_on</span>
+<span>معمل التصميم المعماري (مبنى 8)</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low p-2 rounded">
+<span>أقصى مدة: 7 أيام</span>
+<span class="text-secondary font-semibold">مجاني للأغراض الأكاديمية</span>
+</div>
+</div>
+<button class="w-full py-2.5 px-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container transition-all flex items-center justify-center gap-1.5 shadow-xs active:scale-95">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+<span>طلب استعارة</span>
+</button>
+</div>
+</article>
+</div>
+<!-- Academic Pagination -->
+<div class="flex items-center justify-between bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-4 shadow-xs">
+<span class="text-body-sm font-body-sm text-on-surface-variant">
+            إظهار <span class="font-bold text-on-surface">1 - 6</span> من أصل <span class="font-bold text-on-surface">24</span> جهاز متاح
+          </span>
+<div class="flex items-center gap-1.5">
+<button class="w-8 h-8 rounded border border-outline-variant text-outline flex items-center justify-center hover:bg-surface-container-low disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-semibold text-label-md flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded border border-outline-variant text-on-surface font-semibold text-label-md flex items-center justify-center hover:bg-surface-container-low">2</button>
+<button class="w-8 h-8 rounded border border-outline-variant text-on-surface font-semibold text-label-md flex items-center justify-center hover:bg-surface-container-low">3</button>
+<button class="w-8 h-8 rounded border border-outline-variant text-on-surface flex items-center justify-center hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Interactive Request Modal Dialog (نافذة تقديم طلب الاستعارة - Featured Academic Sheet) -->
+<aside class="lg:col-span-5 xl:col-span-4 sticky top-24" id="loan-request-modal">
+<div class="bg-surface-container-lowest border-2 border-primary/20 rounded-xl shadow-lg p-6 space-y-5">
+<!-- Modal Header -->
+<div class="flex items-start justify-between pb-3 border-b border-outline-variant/30">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-secondary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-primary font-bold">تقديم طلب استعارة معدة</h2>
+<span class="text-label-sm font-label-sm text-on-surface-variant">الطلب الأكاديمي المباشر للمشرفين</span>
+</div>
+</div>
+<button class="w-8 h-8 rounded-md text-outline hover:bg-surface-container-low flex items-center justify-center transition-colors" title="إغلاق أو إعادة تعيين">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Selected Item Preview Card -->
+<div class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-3 flex gap-3 items-center">
+<div class="w-16 h-16 rounded-md overflow-hidden bg-white shrink-0 border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="Close up professional studio shot of a Sony Alpha camera lens and body isolated against an academic light slate background with high definition details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrquvxm5pVfwq2gcTQFyz6kE7UWLLkPTgeqT0MQceLGXmOWP7mf_R7amxfPtqIGfgk9bQy-pkcmZx1zceI85FSbZ0x_31i3mokO50UdCgSpbvjCJQ2P0i58WoRSZxf9CNQNg9o5jv9FfljgNOv37fA6X5-T4uI1dm1OMVPFruE9e4_3etd1fWfpRwMAT7lX8tBenQC8irWJV9foZsBUxTRiYdaiwq0vQmL58C7oFMrS-HBpdr8d0Xx9g"/>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-bold text-secondary">#EQ-8842</span>
+<span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-semibold">جاهز للتسليم</span>
+</div>
+<h4 class="text-body-md font-body-md font-bold text-primary truncate">كاميرا Sony Alpha A7 IV</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">door_front</span>
+<span>معمل الوسائط المتعددة - الدور الثاني</span>
+</p>
+</div>
+</div>
+<!-- Student Limit Verification Alert (شرط الحد الأقصى) -->
+<div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-lg flex items-start gap-3">
+<span class="material-symbols-outlined text-emerald-700 text-[20px] shrink-0 mt-0.5">check_circle</span>
+<div class="text-label-sm font-label-sm text-emerald-900 space-y-0.5">
+<span class="font-bold block">حالة حسابك: مؤهل للاستعارة الفورية</span>
+<p class="text-emerald-800/90 leading-relaxed">
+                لديك استعارة واحدة نشطة حالياً من أصل 2 مسموح بها للطلاب الموثقين وفق معايير كلية الهندسة والحاسب.
+              </p>
+</div>
+</div>
+<!-- Form Area -->
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<!-- Duration Selector -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="text-label-md font-label-md text-on-surface font-semibold">
+                  مدة الاستعارة (بالأيام):
+                </label>
+<span class="text-label-md font-label-md text-primary font-bold bg-primary-fixed/50 px-2 py-0.5 rounded">
+<span id="days-display">5</span> أيام
+                </span>
+</div>
+<input class="w-full accent-primary h-2 bg-surface-container-high rounded-lg cursor-pointer" id="duration-slider" max="10" min="1" oninput="document.getElementById('days-display').innerText = this.value; updateReturnDate(this.value);" type="range" value="5"/>
+<div class="flex justify-between text-[11px] text-outline mt-1 font-semibold">
+<span>يوم واحد</span>
+<span>5 أيام</span>
+<span>10 أيام (الحد الأقصى)</span>
+</div>
+<!-- Calculated Return Date Notification -->
+<div class="mt-2 text-[12px] bg-surface-container-low px-3 py-2 rounded border border-outline-variant/40 flex items-center justify-between text-on-surface-variant">
+<span>تاريخ الإرجاع المتوقع:</span>
+<span class="font-bold text-primary" id="return-date-label">الخميس، 24 أكتوبر 2024</span>
+</div>
+<p class="text-[11px] text-outline mt-1">الحد الأقصى المسموح به 10 أيام وفق لوائح المعامل المركزية للجامعة.</p>
+</div>
+<!-- Academic Purpose & Justification Textarea -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface font-semibold mb-1" for="project-justification">
+                الغرض الأكاديمي والمشروع:
+              </label>
+<textarea class="w-full p-2.5 text-body-sm font-body-sm bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary placeholder:text-outline/70 transition-all" id="project-justification" placeholder="اذكر اسم المقرر الأكاديمي، مشروع التخرج، أو المعمل المشرف والغرض من استعارة الجهاز..." required="" rows="3"></textarea>
+</div>
+<!-- Academic Supervisor / Course Code Tag -->
+<div class="grid grid-cols-2 gap-2">
+<div>
+<label class="block text-[11px] font-semibold text-on-surface-variant mb-1">رمز المقرر</label>
+<input class="w-full h-9 px-2.5 text-label-sm font-label-sm bg-surface-container-low border border-outline-variant/60 rounded" type="text" value="CS492 - مشروع تخرج 1"/>
+</div>
+<div>
+<label class="block text-[11px] font-semibold text-on-surface-variant mb-1">المشرف الأكاديمي</label>
+<input class="w-full h-9 px-2.5 text-label-sm font-label-sm bg-surface-container-low border border-outline-variant/60 rounded" type="text" value="د. عبدالله الخالدي"/>
+</div>
+</div>
+<!-- Agreement Checkbox -->
+<div class="pt-2">
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input class="mt-1 w-4 h-4 rounded border-outline text-primary focus:ring-secondary" id="agree-terms" required="" type="checkbox"/>
+<span class="text-label-sm font-label-sm text-on-surface-variant leading-relaxed">
+                  أتعهد بالحفاظ التام على المعدة وملحقاتها وتسليمها بالموعد المحدد وإبلاغ مشرف المعمل بأي عطل فور حدوثه وفق لائحة العهد الجامعية.
+                </span>
+</label>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-2 pt-2">
+<button class="flex-1 py-2.5 px-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container transition-all flex items-center justify-center gap-2 shadow-xs active:scale-95" onclick="alert('تم إرسال طلبك بنجاح! تم إشعار مشرف المعمل الأكاديمي للمراجعة الفورية.');" type="submit">
+<span class="material-symbols-outlined text-[18px]">send</span>
+<span>تأكيد وإرسال الطلب</span>
+</button>
+<button class="py-2.5 px-3 bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md text-label-md rounded-lg border border-outline-variant/40 transition-colors" type="button">
+                إلغاء
+              </button>
+</div>
+</form>
+<!-- Security note footer inside modal -->
+<div class="text-[11px] text-outline text-center flex items-center justify-center gap-1 pt-1 border-t border-outline-variant/20">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+<span>الطلب يخضع لتوثيق رقمي فوري مرتبط بالهوية الجامعية الموحدة</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Responsive Pivot for Mobile, Anchored from JSON Blueprint) -->
+<nav class="fixed bottom-0 inset-x-0 w-full z-50 flex md:hidden justify-around items-center px-margin-mobile py-space-xs rtl bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant/40 shadow-lg">
+<!-- الرئيسية -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-space-sm py-space-xs font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span>الرئيسية</span>
+</a>
+<!-- بحث وتصنيفات (Active for Catalog Screen) -->
+<a class="flex flex-col items-center justify-center bg-secondary-fixed dark:bg-primary-container text-on-secondary-fixed dark:text-on-primary-container rounded-lg px-space-md py-space-xs font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px] fill-icon">search</span>
+<span>بحث وتصنيفات</span>
+</a>
+<!-- إضافة غرض -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-space-sm py-space-xs font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px]">add_circle</span>
+<span>إضافة غرض</span>
+</a>
+<!-- رسائلي -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-space-sm py-space-xs font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px]">chat</span>
+<span>رسائلي</span>
+</a>
+<!-- حسابي -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-space-sm py-space-xs font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px]">person</span>
+<span>حسابي</span>
+</a>
+</nav>
+<!-- Clean Academic Footer -->
+<footer class="mt-16 bg-surface-container-lowest border-t border-outline-variant/40 py-10 pb-20 md:pb-10 text-on-surface-variant text-body-sm">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+<div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-outline-variant/30">
+<div class="flex items-center gap-3">
+<img alt="BorrowHub Logo Small" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wr24Ts5_n0FZQBOWgw5rKO7QzGO-xETRnjMslxRLDS7xgSqrcOJdNm0JX4H41vIi8qF0ztxUnsQSlVWkB-KtpynNAy7jC0dr1dqEZh4YPyFK9bRmAlF1KtZnBRp909EcomLva2ABeoifvCuU7oK21Fep_bb7Oqr9mXfeEoy6ExyeivNIxqwSh2dwp-3PmplazY4wcdd0xf2q99LzevUj8JtfCUhB-rMou-xmwbnjPY4MyPSafUslbNP7c7"/>
+<div>
+<span class="font-bold text-primary block">BorrowHub • شبكة إعارة التجهيزات الجامعية</span>
+<span class="text-label-sm font-label-sm text-outline">نظام معتمد تحت إشراف عمادة شؤون الطلاب وإدارة المعامل المركزية</span>
+</div>
+</div>
+<!-- Academic Accreditation Badges -->
+<div class="flex flex-wrap items-center gap-4 text-label-sm font-label-sm">
+<span class="flex items-center gap-1 text-emerald-800 bg-emerald-50 px-2 py-1 rounded border border-emerald-200">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span>اعتماد مجلس المعامل 2024</span>
+</span>
+<span class="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-2 py-1 rounded border border-outline-variant/40">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span>تشفير اتصالات TLS 1.3 الموثق</span>
+</span>
+<span class="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-2 py-1 rounded border border-outline-variant/40">
+<span class="material-symbols-outlined text-[16px]">policy</span>
+<span>لائحة حماية العهد الأكاديمية</span>
+</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-[12px] text-outline">
+<p>© 2024 منصة BorrowHub الأكاديمية. جميع الحقوق محفوظة لجامعة الملك فهد للبترول والمعادن وكافة الجامعات الشريكة.</p>
+<div class="flex items-center gap-4">
+<a class="hover:text-primary transition-colors" href="#">سياسة الخصوصية</a>
+<a class="hover:text-primary transition-colors" href="#">شروط الاستخدام والإعارة</a>
+<a class="hover:text-primary transition-colors" href="#">دليل استخدام الأجهزة المعملية</a>
+<a class="hover:text-primary transition-colors" href="#">الدعم الفني للمعامل</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Inline Lightweight Micro-Interactions Script -->
+<script>
+    function updateReturnDate(days) {
+      const today = new Date();
+      const returnDate = new Date();
+      returnDate.setDate(today.getDate() + parseInt(days));
+      
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const formatted = returnDate.toLocaleDateString('ar-SA', options);
+      const label = document.getElementById('return-date-label');
+      if (label) {
+        label.innerText = formatted;
+      }
+    }
+
+    // Initialize date on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const slider = document.getElementById('duration-slider');
+      if (slider) {
+        updateReturnDate(slider.value);
+      }
+    });
+  </script>
+</body></html>
