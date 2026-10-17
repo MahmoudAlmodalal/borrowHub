@@ -1,0 +1,8 @@
+{
+  "name": "BorrowHub",
+  "description": "منصة استعارة وإدارة المعدات الجامعية - University Equipment Borrowing & Management Platform with Academic Focus design system.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
