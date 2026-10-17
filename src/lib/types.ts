@@ -1,16 +1,14 @@
-export type EquipmentCategory = 
-  | 'computing_ai' 
-  | 'robotics_iot' 
-  | 'electronics_measurement' 
-  | 'optics_media' 
-  | 'mechanical_fabrication';
+export type EquipmentCategory =
+  | 'electronics_measurement'
+  | 'robotics_iot'
+  | 'mechanical_fabrication'
+  | 'computing_ai'
+  | 'optics_media';
 
-export type EquipmentStatus = 
-  | 'available' 
-  | 'reserved' 
-  | 'borrowed' 
-  | 'maintenance' 
-  | 'retired';
+export interface EquipmentSpec {
+  label: string;
+  value: string;
+}
 
 export interface Equipment {
   id: string;
@@ -27,19 +25,19 @@ export interface Equipment {
   imageUrl: string;
   maxLoanDays: number;
   requiresSupervisorApproval: boolean;
-  specs: { label: string; value: string }[];
+  specs: EquipmentSpec[];
   accessories: string[];
   safetyGuidelines: string[];
   descriptionAr: string;
   descriptionEn: string;
 }
 
-export type LoanStatus = 
-  | 'pending_approval' 
-  | 'approved_ready_for_pickup' 
-  | 'active_in_possession' 
-  | 'returned_cleared' 
-  | 'overdue' 
+export type LoanStatus =
+  | 'pending_approval'
+  | 'approved_ready_for_pickup'
+  | 'active_in_possession'
+  | 'returned_inspected'
+  | 'overdue'
   | 'rejected';
 
 export interface LoanRecord {
@@ -61,9 +59,7 @@ export interface LoanRecord {
   projectTitle: string;
   supervisorName: string;
   handedOverBy?: string;
-  inspectedBy?: string;
-  inspectionNotes?: string;
-  conditionGrade?: 'A' | 'B' | 'C' | 'Damaged';
+  receivedBy?: string;
   notes?: string;
 }
 
@@ -77,11 +73,16 @@ export interface StudentAccount {
   college: string;
   department: string;
   academicYear: string;
-  verificationStatus: 'pending' | 'verified' | 'rejected';
+  verificationStatus: 'verified' | 'pending' | 'rejected';
   idCardPhotoUrl: string;
   activeLoansCount: number;
   submissionDate: string;
-  rejectionReason?: string;
+}
+
+export interface ContactAttempt {
+  date: string;
+  method: 'sms' | 'email' | 'phone';
+  note: string;
 }
 
 export interface OverdueIncident {
@@ -95,8 +96,18 @@ export interface OverdueIncident {
   assignedSerial: string;
   dueDate: string;
   daysOverdue: number;
-  severityTier: 'tier1_warning' | 'tier2_warning' | 'tier3_hold';
+  severityTier: 'tier1_warning' | 'tier2_dean_letter' | 'tier3_hold';
   assetValueSar: number;
-  contactAttempts: { date: string; method: 'sms' | 'email' | 'phone'; note: string }[];
+  contactAttempts: ContactAttempt[];
   academicHoldPlaced: boolean;
+}
+
+export type UserRole = 'student' | 'supervisor' | 'counter_tech' | 'admin';
+
+export interface ToastMessage {
+  id: string;
+  type: 'success' | 'warning' | 'error' | 'info';
+  title: string;
+  message: string;
+  duration?: number;
 }

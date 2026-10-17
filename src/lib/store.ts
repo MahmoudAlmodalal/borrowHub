@@ -1,240 +1,346 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Equipment, LoanRecord, StudentAccount, OverdueIncident } from './types';
+import { useSyncExternalStore } from 'react';
+import { Equipment, LoanRecord, StudentAccount, OverdueIncident, ToastMessage, UserRole } from './types';
 import { INITIAL_EQUIPMENT, INITIAL_LOANS, INITIAL_STUDENTS, INITIAL_OVERDUE } from './mockData';
 
-const STORAGE_KEY = 'borrowhub_state_v1';
-
-interface AppState {
+interface BorrowHubState {
+  currentRole: UserRole;
+  lang: 'ar' | 'en';
   equipment: Equipment[];
   loans: LoanRecord[];
   students: StudentAccount[];
   overdue: OverdueIncident[];
-  currentRole: 'student' | 'supervisor' | 'counter_tech' | 'admin';
-  lang: 'ar' | 'en';
+  toasts: ToastMessage[];
 }
 
-function getInitialState(): AppState {
-  if (typeof window === 'undefined') {
-    return {
-      equipment: INITIAL_EQUIPMENT,
-      loans: INITIAL_LOANS,
-      students: INITIAL_STUDENTS,
-      overdue: INITIAL_OVERDUE,
-      currentRole: 'student',
-      lang: 'ar',
+let state: BorrowHubState = {
+  currentRole: 'student',
+  lang: 'ar',
+  equipment: [...INITIAL_EQUIPMENT],
+  loans: [...INITIAL_LOANS],
+  students: [...INITIAL_STUDENTS],
+  overdue: [...INITIAL_OVERDUE],
+  toasts: [],
+};
+
+const listeners = new Set<() => void>();
+
+function notify() {
+  listeners.forEach((listener) => listener());
+}
+
+export function getState(): BorrowHubState {
+  return state;
+}
+
+function updateState(updater: (prev: BorrowHubState) => BorrowHubState) {
+  state = updater(state);
+  notify();
+}
+
+export const storeActions = {
+  setRole(role: UserRole) {
+    updateState((prev) => ({
+      ...prev,
+      currentRole: role,
+    }));
+    const roleLabels: Record<UserRole, string> = {
+      student: 'طالب / باحث',
+      supervisor: 'مشرف المعمل',
+      counter_tech: 'فني الشباك',
+      admin: 'مسؤول النظام',
     };
-  }
+    storeActions.showToast({
+      type: 'info',
+      title: 'تم التبديل إلى دور ' + roleLabels[role],
+      message: 'تم تفعيل صلاحيات وعروض ' + roleLabels[role] + ' بنجاح',
+    });
+  },
 
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      return JSON.parse(saved);
-    }
-  } catch (err) {
-    console.warn('Error reading from localStorage', err);
-  }
+  toggleLanguage() {
+    updateState((prev) => ({
+      ...prev,
+      lang: prev.lang === 'ar' ? 'en' : 'ar',
+    }));
+  },
 
-  return {
-    equipment: INITIAL_EQUIPMENT,
-    loans: INITIAL_LOANS,
-    students: INITIAL_STUDENTS,
-    overdue: INITIAL_OVERDUE,
-    currentRole: 'student',
-    lang: 'ar',
-  };
-}
+  showToast(toast: Omit<ToastMessage, 'id'>) {
+    const id = 'toast-' + Math.random().toString(36).substring(2, 9);
+    const newToast: ToastMessage = { ...toast, id };
+    updateState((prev) => ({
+      ...prev,
+      toasts: [...prev.toasts.slice(-4), newToast],
+    }));
 
-export function useBorrowHubStore() {
-  const [state, setState] = useState<AppState>(getInitialState);
+    const duration = toast.duration || 4500;
+    setTimeout(() => {
+      storeActions.dismissToast(id);
+    }, duration);
+  },
 
-  // Sync to localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (err) {
-        console.warn('Error saving to localStorage', err);
-      }
-    }
-  }, [state]);
+  dismissToast(id: string) {
+    updateState((prev) => ({
+      ...prev,
+      toasts: prev.toasts.filter((t) => t.id !== id),
+    }));
+  },
 
-  const setRole = (role: AppState['currentRole']) => {
-    setState((prev) => ({ ...prev, currentRole: role }));
-  };
-
-  const toggleLanguage = () => {
-    setState((prev) => ({ ...prev, lang: prev.lang === 'ar' ? 'en' : 'ar' }));
-  };
-
-  const submitLoanRequest = (data: {
+  requestLoan(data: {
+    studentId: string;
+    studentNameAr: string;
+    studentNameEn: string;
+    college: string;
+    department: string;
     equipmentId: string;
+    equipmentNameAr: string;
+    dueDate: string;
     projectTitle: string;
     supervisorName: string;
-    durationDays: number;
-    studentNameAr?: string;
-  }) => {
-    const eq = state.equipment.find((e) => e.id === data.equipmentId);
-    if (!eq) return null;
-
-    const newLoan: LoanRecord = {
-      id: `loan-${Date.now()}`,
-      token: `LOAN-2026-${Math.floor(1000 + Math.random() * 9000)}`,
-      studentId: 'std-101',
-      studentNameAr: data.studentNameAr || 'عمر خالد المنصور',
-      studentNameEn: 'Omar Khalid Al-Mansour',
-      college: 'كلية الهندسة',
-      department: 'الهندسة الكهربائية والحاسبات',
-      equipmentId: eq.id,
-      equipmentNameAr: eq.nameAr,
-      assignedSerial: 'لم يخصص بعد',
+    notes?: string;
+  }) {
+    const id = 'loan-' + (state.loans.length + 10);
+    const token = 'LOAN-2026-' + Math.floor(1000 + Math.random() * 9000);
+    const newRecord: LoanRecord = {
+      id,
+      token,
+      ...data,
+      assignedSerial: 'قيد الاعتماد من المشرف',
       requestDate: new Date().toISOString().split('T')[0],
-      dueDate: new Date(Date.now() + data.durationDays * 86400000).toISOString().split('T')[0],
-      status: eq.requiresSupervisorApproval ? 'pending_approval' : 'approved_ready_for_pickup',
-      projectTitle: data.projectTitle,
-      supervisorName: data.supervisorName,
-      notes: 'طلب استعارة جديد قيد المتابعة.',
+      status: 'pending_approval',
     };
 
-    setState((prev) => ({
+    updateState((prev) => ({
       ...prev,
-      loans: [newLoan, ...prev.loans],
+      loans: [newRecord, ...prev.loans],
     }));
 
-    return newLoan;
-  };
+    storeActions.showToast({
+      type: 'success',
+      title: 'تم إرسال طلب الاستعارة',
+      message: `رقم الطلب الأكاديمي ${token}. الطلب معروض الآن في طابور مراجعة المشرف.`,
+    });
 
-  const approveLoanRequest = (loanId: string) => {
-    setState((prev) => ({
-      ...prev,
-      loans: prev.loans.map((loan) =>
-        loan.id === loanId
-          ? {
-              ...loan,
-              status: 'approved_ready_for_pickup',
-              pickupDate: new Date().toISOString().split('T')[0],
-              notes: 'تمت الموافقة من المشرف، العهدة بانتظار الاستلام بالشباك.',
-            }
-          : loan
-      ),
-    }));
-  };
+    return newRecord;
+  },
 
-  const rejectLoanRequest = (loanId: string, reason: string) => {
-    setState((prev) => ({
-      ...prev,
-      loans: prev.loans.map((loan) =>
-        loan.id === loanId
-          ? {
-              ...loan,
-              status: 'rejected',
-              notes: `تم رفض الطلب: ${reason}`,
-            }
-          : loan
-      ),
-    }));
-  };
-
-  const dispatchLoanPickup = (loanId: string, serial: string) => {
-    setState((prev) => {
-      const targetLoan = prev.loans.find((l) => l.id === loanId);
-      const updatedLoans = prev.loans.map((loan) =>
-        loan.id === loanId
-          ? {
-              ...loan,
-              status: 'active_in_possession' as const,
-              assignedSerial: serial || 'SN-DEF-001',
-              handedOverBy: 'فني الشباك: سامي الحارثي',
-              pickupDate: new Date().toISOString().split('T')[0],
-              notes: 'تم تسليم العهدة وفحص الملحقات مع الطالب.',
-            }
-          : loan
-      );
-
-      // Decrement available quantity for the equipment
-      const updatedEquipment = prev.equipment.map((eq) =>
-        targetLoan && eq.id === targetLoan.equipmentId
-          ? { ...eq, availableQuantity: Math.max(0, eq.availableQuantity - 1) }
-          : eq
-      );
+  approveLoan(loanId: string, assignedSerial?: string) {
+    let affectedLoan: LoanRecord | undefined;
+    updateState((prev) => {
+      const nextLoans = prev.loans.map((l) => {
+        if (l.id === loanId) {
+          affectedLoan = l;
+          return {
+            ...l,
+            status: 'approved_ready_for_pickup' as const,
+            assignedSerial: assignedSerial || l.assignedSerial || 'SN-LAB-' + Math.floor(1000 + Math.random() * 9000),
+          };
+        }
+        return l;
+      });
 
       return {
         ...prev,
-        loans: updatedLoans,
-        equipment: updatedEquipment,
+        loans: nextLoans,
       };
     });
-  };
 
-  const completeInspection = (
-    loanId: string,
-    grade: 'A' | 'B' | 'C' | 'Damaged',
-    notes: string
-  ) => {
-    setState((prev) => {
-      const targetLoan = prev.loans.find((l) => l.id === loanId);
-      const updatedLoans = prev.loans.map((loan) =>
-        loan.id === loanId
+    storeActions.showToast({
+      type: 'success',
+      title: 'تم اعتماد طلب الاستعارة بنجاح',
+      message: `تم تحويل الطلب (${affectedLoan?.token || loanId}) إلى شباك الاستلام للتسليم الفعلي.`,
+    });
+  },
+
+  rejectLoan(loanId: string, reason?: string) {
+    updateState((prev) => ({
+      ...prev,
+      loans: prev.loans.map((l) =>
+        l.id === loanId
           ? {
-              ...loan,
-              status: 'returned_cleared' as const,
-              returnDate: new Date().toISOString().split('T')[0],
-              conditionGrade: grade,
-              inspectedBy: 'فني الفحص: طارق العمري',
-              inspectionNotes: notes,
-              notes: 'تم إرجاع العهدة وإبراء ذمة الطالب بنجاح.',
+              ...l,
+              status: 'rejected' as const,
+              notes: (l.notes ? l.notes + ' | ' : '') + 'سبب الرفض: ' + (reason || 'عدم استيفاء الاشتراطات المعملية'),
             }
-          : loan
-      );
+          : l
+      ),
+    }));
 
-      // Restore equipment available quantity
-      const updatedEquipment = prev.equipment.map((eq) =>
-        targetLoan && eq.id === targetLoan.equipmentId
-          ? { ...eq, availableQuantity: Math.min(eq.totalQuantity, eq.availableQuantity + 1) }
-          : eq
-      );
+    storeActions.showToast({
+      type: 'warning',
+      title: 'تم رفض طلب الاستعارة',
+      message: reason ? `السبب: ${reason}` : 'تم إشعار الطالب بالرفض الأكاديمي',
+    });
+  },
 
-      // Remove from overdue if it was overdue
-      const updatedOverdue = prev.overdue.filter((ov) => ov.loanId !== loanId);
+  handoverLoan(loanId: string, staffName = 'سامي الحارثي') {
+    let targetEqId: string | undefined;
+    let loanToken: string = '';
+
+    updateState((prev) => {
+      const nextLoans = prev.loans.map((l) => {
+        if (l.id === loanId) {
+          targetEqId = l.equipmentId;
+          loanToken = l.token;
+          return {
+            ...l,
+            status: 'active_in_possession' as const,
+            pickupDate: new Date().toISOString().split('T')[0],
+            handedOverBy: staffName,
+          };
+        }
+        return l;
+      });
+
+      const nextEquipment = prev.equipment.map((eq) => {
+        if (eq.id === targetEqId && eq.availableQuantity > 0) {
+          return { ...eq, availableQuantity: eq.availableQuantity - 1 };
+        }
+        return eq;
+      });
 
       return {
         ...prev,
-        loans: updatedLoans,
-        equipment: updatedEquipment,
-        overdue: updatedOverdue,
+        loans: nextLoans,
+        equipment: nextEquipment,
       };
     });
-  };
 
-  const verifyStudent = (studentId: string, approved: boolean, reason?: string) => {
-    setState((prev) => ({
+    storeActions.showToast({
+      type: 'success',
+      title: 'تم تأكيد تسليم العهدة للطالب',
+      message: `تم تسليم الجهاز وتوثيق العهدة بالرقم ${loanToken}. بدأت فترة الاستعارة الرسمية.`,
+    });
+  },
+
+  returnLoan(loanId: string, condition = 'سليم 100%', notes?: string) {
+    let targetEqId: string | undefined;
+    let token: string = '';
+
+    updateState((prev) => {
+      const nextLoans = prev.loans.map((l) => {
+        if (l.id === loanId) {
+          targetEqId = l.equipmentId;
+          token = l.token;
+          return {
+            ...l,
+            status: 'returned_inspected' as const,
+            returnDate: new Date().toISOString().split('T')[0],
+            receivedBy: 'فني الشباك: سامي الحارثي',
+            notes: (l.notes ? l.notes + ' | ' : '') + `فحص الإرجاع: ${condition}. ${notes || ''}`,
+          };
+        }
+        return l;
+      });
+
+      const nextEquipment = prev.equipment.map((eq) => {
+        if (eq.id === targetEqId) {
+          return { ...eq, availableQuantity: Math.min(eq.totalQuantity, eq.availableQuantity + 1) };
+        }
+        return eq;
+      });
+
+      // Clear from overdue if present
+      const nextOverdue = prev.overdue.filter((ov) => ov.loanId !== loanId);
+
+      return {
+        ...prev,
+        loans: nextLoans,
+        equipment: nextEquipment,
+        overdue: nextOverdue,
+      };
+    });
+
+    storeActions.showToast({
+      type: 'success',
+      title: 'تم استلام وفحص العهدة بنجاح',
+      message: `تم إخلاء طرف الطالب عن السجل ${token} وإعادة الجهاز للمخزون المتاح.`,
+    });
+  },
+
+  requestExtension(loanId: string, additionalDays = 7) {
+    updateState((prev) => ({
       ...prev,
-      students: prev.students.map((std) =>
-        std.id === studentId
-          ? {
-              ...std,
-              verificationStatus: approved ? 'verified' : 'rejected',
-              rejectionReason: reason,
-            }
-          : std
-      ),
+      loans: prev.loans.map((l) => {
+        if (l.id === loanId) {
+          const currentDue = new Date(l.dueDate);
+          currentDue.setDate(currentDue.getDate() + additionalDays);
+          const nextDueDate = currentDue.toISOString().split('T')[0];
+          return {
+            ...l,
+            dueDate: nextDueDate,
+            notes: (l.notes ? l.notes + ' | ' : '') + `تم تمديد الاستعارة ${additionalDays} أيام إضافية`,
+          };
+        }
+        return l;
+      }),
     }));
-  };
 
-  const toggleAcademicHold = (incidentId: string) => {
-    setState((prev) => ({
+    storeActions.showToast({
+      type: 'info',
+      title: 'تم تمديد فترة الاستعارة',
+      message: `تمت إضافة ${additionalDays} أيام إلى الموعد النهائي للاستعارة.`,
+    });
+  },
+
+  verifyStudent(studentId: string, status: 'verified' | 'rejected') {
+    updateState((prev) => ({
+      ...prev,
+      students: prev.students.map((s) => (s.id === studentId ? { ...s, verificationStatus: status } : s)),
+    }));
+
+    storeActions.showToast({
+      type: status === 'verified' ? 'success' : 'error',
+      title: status === 'verified' ? 'تم اعتماد الحساب الجامعي' : 'تم رفض الحساب الجامعي',
+      message: status === 'verified' ? 'أصبح بإمكان الطالب تقديم طلبات استعارة فورية' : 'تم رفض الاعتماد لعدم وضوح الوثائق',
+    });
+  },
+
+  placeAcademicHold(incidentId: string) {
+    updateState((prev) => ({
       ...prev,
       overdue: prev.overdue.map((ov) =>
         ov.id === incidentId
-          ? { ...ov, academicHoldPlaced: !ov.academicHoldPlaced }
+          ? {
+              ...ov,
+              academicHoldPlaced: true,
+              severityTier: 'tier3_hold',
+              contactAttempts: [
+                ...ov.contactAttempts,
+                {
+                  date: new Date().toISOString().split('T')[0],
+                  method: 'email',
+                  note: 'تم إيقاف الخدمات الأكاديمية (تسجيل المقررات ووثيقة التخرج) رسمياً.',
+                },
+              ],
+            }
           : ov
       ),
     }));
-  };
 
-  const addContactAttempt = (incidentId: string, method: 'sms' | 'email' | 'phone', note: string) => {
-    setState((prev) => ({
+    storeActions.showToast({
+      type: 'error',
+      title: 'تم تطبيق الحجز الأكاديمي',
+      message: 'تم إيقاف الخدمات الجامعية للطالب في البوابة الأكاديمية نظراً لعدم إرجاع العهدة.',
+    });
+  },
+
+  removeAcademicHold(incidentId: string) {
+    updateState((prev) => ({
+      ...prev,
+      overdue: prev.overdue.map((ov) => (ov.id === incidentId ? { ...ov, academicHoldPlaced: false } : ov)),
+    }));
+
+    storeActions.showToast({
+      type: 'info',
+      title: 'تم رفع الحجز الأكاديمي',
+      message: 'تم إلغاء الإيقاف وإعادة تفعيل الخدمات الأكاديمية للطالب.',
+    });
+  },
+
+  sendOverdueReminder(incidentId: string, method: 'sms' | 'email' | 'phone') {
+    const labels = { sms: 'رسالة SMS نصية', email: 'بريد إلكتروني رسمي', phone: 'اتصال هاتفي' };
+    updateState((prev) => ({
       ...prev,
       overdue: prev.overdue.map((ov) =>
         ov.id === incidentId
@@ -242,52 +348,83 @@ export function useBorrowHubStore() {
               ...ov,
               contactAttempts: [
                 ...ov.contactAttempts,
-                { date: new Date().toISOString().split('T')[0], method, note },
+                {
+                  date: new Date().toISOString().split('T')[0],
+                  method,
+                  note: `إشعار فوري وتذكير بسرعة إرجاع العهدة المعملية عبر ${labels[method]}.`,
+                },
               ],
             }
           : ov
       ),
     }));
-  };
 
-  const addEquipment = (newEq: Omit<Equipment, 'id'>) => {
-    const created: Equipment = {
-      ...newEq,
-      id: `eq-${Date.now()}`,
-    };
-    setState((prev) => ({
+    storeActions.showToast({
+      type: 'success',
+      title: `تم إرسال ${labels[method]}`,
+      message: 'تم تسجيل محاولة التواصل في سجل المتابعة القانونية والأكاديمية.',
+    });
+  },
+
+  addEquipment(newEquip: Omit<Equipment, 'id'>) {
+    const id = 'eq-' + (state.equipment.length + 10);
+    const equip: Equipment = { ...newEquip, id };
+    updateState((prev) => ({
       ...prev,
-      equipment: [created, ...prev.equipment],
+      equipment: [equip, ...prev.equipment],
     }));
-  };
 
-  const resetDemoState = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem(STORAGE_KEY);
-    }
-    setState({
-      equipment: INITIAL_EQUIPMENT,
-      loans: INITIAL_LOANS,
-      students: INITIAL_STUDENTS,
-      overdue: INITIAL_OVERDUE,
+    storeActions.showToast({
+      type: 'success',
+      title: 'تمت إضافة عهدة جديدة',
+      message: `تم تسجيل الجهاز ${equip.nameAr} بكود ${equip.code} في المعمل.`,
+    });
+  },
+
+  updateEquipment(id: string, updates: Partial<Equipment>) {
+    updateState((prev) => ({
+      ...prev,
+      equipment: prev.equipment.map((eq) => (eq.id === id ? { ...eq, ...updates } : eq)),
+    }));
+
+    storeActions.showToast({
+      type: 'info',
+      title: 'تم تحديث بيانات العهدة',
+      message: 'تم حفظ التعديلات بنجاح في قاعدة بيانات المستودع المعملي.',
+    });
+  },
+
+  resetDemoState() {
+    state = {
       currentRole: 'student',
       lang: 'ar',
+      equipment: [...INITIAL_EQUIPMENT],
+      loans: [...INITIAL_LOANS],
+      students: [...INITIAL_STUDENTS],
+      overdue: [...INITIAL_OVERDUE],
+      toasts: [],
+    };
+    notify();
+    storeActions.showToast({
+      type: 'info',
+      title: 'تمت استعادة البيانات الافتراضية',
+      message: 'تمت إعادة ضبط المستودع والطلبات والإنذارات للحالة الأولية.',
     });
-  };
+  },
+};
+
+export function useBorrowHubStore() {
+  const currentState = useSyncExternalStore(
+    (callback) => {
+      listeners.add(callback);
+      return () => listeners.delete(callback);
+    },
+    getState,
+    getState
+  );
 
   return {
-    ...state,
-    setRole,
-    toggleLanguage,
-    submitLoanRequest,
-    approveLoanRequest,
-    rejectLoanRequest,
-    dispatchLoanPickup,
-    completeInspection,
-    verifyStudent,
-    toggleAcademicHold,
-    addContactAttempt,
-    addEquipment,
-    resetDemoState,
+    ...currentState,
+    ...storeActions,
   };
 }

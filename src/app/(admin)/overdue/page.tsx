@@ -1,287 +1,248 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useBorrowHubStore } from '@/lib/store';
 import { OverdueIncident } from '@/lib/types';
-import { 
-  AlertTriangle, ShieldAlert, Phone, Mail, Clock, Check, 
-  Send, AlertCircle, Ban, History, DollarSign
+import {
+  AlertTriangle,
+  Phone,
+  Mail,
+  Clock,
+  Check,
+  Send,
+  Ban,
+  ShieldAlert,
+  Sparkles,
+  MessageSquare,
+  AlertCircle,
+  FileCheck,
+  Building,
 } from 'lucide-react';
 
 export default function OverdueDashboardPage() {
-  const { overdue, toggleAcademicHold, addContactAttempt } = useBorrowHubStore();
-  const [selectedIncident, setSelectedIncident] = useState<OverdueIncident | null>(null);
-  const [reminderNote, setReminderNote] = useState('يرجى الحضور فوراً إلى شباك المعامل لتسليم العهدة لتفادي الغرامات والحظر الأكاديمي.');
-  const [contactMethod, setContactMethod] = useState<'sms' | 'email' | 'phone'>('sms');
-  const [notificationSent, setNotificationSent] = useState(false);
+  const { overdue, sendOverdueReminder, placeAcademicHold, removeAcademicHold } = useBorrowHubStore();
+  const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
 
-  const tier1Count = overdue.filter((o) => o.daysOverdue <= 3).length;
-  const tier2Count = overdue.filter((o) => o.daysOverdue > 3 && o.daysOverdue <= 7).length;
-  const tier3Count = overdue.filter((o) => o.daysOverdue > 7).length;
-
-  const handleSendReminder = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedIncident) return;
-    addContactAttempt(selectedIncident.id, contactMethod, reminderNote);
-    setNotificationSent(true);
-    setTimeout(() => {
-      setNotificationSent(false);
-      setSelectedIncident(null);
-    }, 2000);
-  };
+  const selectedIncident =
+    overdue.find((ov) => ov.id === selectedIncidentId) || overdue[0] || null;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6" dir="rtl">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-red-50 border border-red-200 text-red-800 text-xs font-semibold mb-1">
-            <span>SCR-10</span>
-            <span>·</span>
-            <span>لوحة إنذارات العتاد المتأخر وإدارة المخاطر</span>
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
+              لوحة متابعة المتأخرات والحجز الأكاديمي (Overdue & Holds)
+            </h1>
           </div>
-          <h1 className="text-2xl font-bold text-[#00236f]">رصد العهد المتأخرة وإجراءات التصعيد</h1>
-          <p className="text-xs text-slate-500">
-            متابعة فورية للأجهزة المتجاوزة لمهلة الإرجاع وتطبيق الإجراءات الأكاديمية والحظر النظامي
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            متابعة العهد المتأخرة، توثيق الإنذارات، وتطبيق الحجز الأكاديمي على الطلاب المتخلفين عن الإرجاع
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs bg-red-100 text-red-800 px-3 py-1.5 rounded-full font-bold">
-            {overdue.length} حالات متأخرة تستوجب التدخل
-          </span>
+          <Link
+            href="/returns"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition shadow-xs min-h-[44px]"
+          >
+            <span>شباك إرجاع العهد ←</span>
+          </Link>
         </div>
       </div>
 
-      {/* Escalation Severity Tiers */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white p-5 rounded-xl border border-amber-200 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded">
-              المستوى الأول (1–3 أيام)
-            </span>
-            <span className="font-mono text-xl font-bold text-amber-700">{tier1Count}</span>
+      {/* Escalation Policy Banner */}
+      <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs sm:text-sm text-rose-950">
+        <div className="flex items-start gap-3">
+          <ShieldAlert className="w-6 h-6 text-rose-600 shrink-0 mt-0.5" />
+          <div>
+            <h3 className="font-bold text-sm text-rose-900">سياسة التصعيد المعملي المعتمدة بالجامعة:</h3>
+            <p className="text-xs text-rose-800 mt-0.5">
+              تأخير 1-3 أيام (إنذار SMS) ← تأخير 4-7 أيام (خطاب العمادة الرسمي) ← تأخير &gt; 7 أيام (إيقاف التسجيل وتطبيق الحجز الأكاديمي).
+            </p>
           </div>
-          <p className="text-xs text-slate-600">
-            إشعار تذكيري آلي عبر البريد الجامعي والرسائل النصية SMS
-          </p>
         </div>
 
-        <div className="bg-white p-5 rounded-xl border border-orange-200 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded">
-              المستوى الثاني (4–7 أيام)
-            </span>
-            <span className="font-mono text-xl font-bold text-orange-700">{tier2Count}</span>
-          </div>
-          <p className="text-xs text-slate-600">
-            إنذار خطي رسمي، اتصال مباشر بالهاتف، وتجميد حجز أجهزة جديدة
-          </p>
-        </div>
-
-        <div className="bg-white p-5 rounded-xl border border-red-200 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-red-800 bg-red-50 px-2 py-0.5 rounded">
-              المستوى الثالث (&gt; 7 أيام)
-            </span>
-            <span className="font-mono text-xl font-bold text-red-700">{tier3Count}</span>
-          </div>
-          <p className="text-xs text-slate-600">
-            حظر أكاديمي SIS، إيقاف نتائج الاختبارات، وتغريم القيمة الدفترية
-          </p>
-        </div>
+        <span className="font-mono text-xs font-bold text-rose-800 bg-rose-100 px-3 py-1.5 rounded-lg border border-rose-200 shrink-0">
+          إجمالي الحالات الحرجة: {overdue.length}
+        </span>
       </div>
 
-      {/* Overdue Incident Ledger Table */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm mb-8">
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="text-xs font-bold text-[#00236f]">جدول المتابعة والإنذارات النشطة</h2>
-          <span className="text-xs text-slate-400 font-mono">آخر تحديث: قبل دقائق</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-start text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold">
-                <th className="py-3 px-4 text-start">الطالب المستعير</th>
-                <th className="py-3 px-4 text-start">المعدة والرقم التسلسلي</th>
-                <th className="py-3 px-4 text-start">القيمة الدفترية</th>
-                <th className="py-3 px-4 text-start">تاريخ الاستحقاق</th>
-                <th className="py-3 px-4 text-start">أيام التأخير</th>
-                <th className="py-3 px-4 text-start">الحظر الأكاديمي</th>
-                <th className="py-3 px-4 text-center">الإجراءات</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {overdue.map((inc, idx) => (
-                <tr
-                  key={inc.id}
-                  className={`hover:bg-slate-50 transition ${
-                    idx % 2 === 0 ? 'bg-white' : 'bg-[#f7f9fb]/40'
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left col: Incident cards list (5 cols) */}
+        <div className="lg:col-span-5 space-y-3">
+          {overdue.length === 0 ? (
+            <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center text-slate-500 space-y-2">
+              <Check className="w-8 h-8 text-emerald-500 mx-auto" />
+              <p className="text-xs font-bold">لا توجد أي متأخرات معملية مسجلة حالياً</p>
+            </div>
+          ) : (
+            overdue.map((incident) => {
+              const isSelected = selectedIncident?.id === incident.id;
+              return (
+                <div
+                  key={incident.id}
+                  onClick={() => setSelectedIncidentId(incident.id)}
+                  className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                    isSelected
+                      ? 'border-rose-500 bg-rose-50/40 shadow-xs ring-1 ring-rose-500'
+                      : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
-                  <td className="py-3.5 px-4">
-                    <div className="font-bold text-slate-800">{inc.studentNameAr}</div>
-                    <div className="text-[11px] text-slate-500 font-mono">
-                      {inc.studentIdNumber} · {inc.studentPhone}
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <div className="font-semibold text-[#00236f]">{inc.equipmentNameAr}</div>
-                    <div className="text-[11px] font-mono text-slate-400">{inc.assignedSerial}</div>
-                  </td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-slate-700">
-                    {inc.assetValueSar.toLocaleString()} ر.س
-                  </td>
-                  <td className="py-3.5 px-4 font-mono text-red-600 font-bold whitespace-nowrap">
-                    {inc.dueDate}
-                  </td>
-                  <td className="py-3.5 px-4 whitespace-nowrap">
-                    <span className="bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded border border-red-200">
-                      {inc.daysOverdue} أيام تأخير
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <span className="font-mono font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded">
+                      تأخير {incident.daysOverdue} يوماً
                     </span>
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <button
-                      onClick={() => toggleAcademicHold(inc.id)}
-                      className={`text-[11px] font-bold px-2.5 py-1 rounded transition flex items-center gap-1 ${
-                        inc.academicHoldPlaced
-                          ? 'bg-red-600 text-white'
-                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                      }`}
-                    >
-                      <Ban className="w-3 h-3" />
-                      <span>{inc.academicHoldPlaced ? 'قيد الحظر الأكاديمي' : 'تفعيل الحظر'}</span>
-                    </button>
-                  </td>
-                  <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                    <button
-                      onClick={() => setSelectedIncident(inc)}
-                      className="bg-[#00236f] hover:bg-[#0284c7] text-white text-[11px] font-bold px-3 py-1.5 rounded transition inline-flex items-center gap-1 shadow-sm"
-                    >
-                      <Send className="w-3 h-3" />
-                      <span>إرسال إنذار</span>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    {incident.academicHoldPlaced && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-600 text-white flex items-center gap-1">
+                        <Ban className="w-3 h-3" />
+                        حجز أكاديمي نشط
+                      </span>
+                    )}
+                  </div>
+
+                  <h4 className="font-bold text-sm text-slate-900 mt-1">
+                    {incident.studentNameAr}
+                  </h4>
+                  <div className="text-xs text-slate-600 mt-0.5">
+                    {incident.equipmentNameAr}
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-slate-400 mt-3 pt-2 border-t border-slate-100">
+                    <span>قيمة الأصل: <strong className="text-slate-700 font-mono">{incident.assetValueSar.toLocaleString()} ر.س</strong></span>
+                    <span className="font-mono text-slate-500">استحقاق: {incident.dueDate}</span>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Right col: Case Dossier & Escalation Actions (7 cols) */}
+        <div className="lg:col-span-7">
+          {selectedIncident ? (
+            <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-6">
+              <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+                <div>
+                  <span className="text-xs font-mono font-bold text-rose-600">
+                    ملف القضية: {selectedIncident.id}
+                  </span>
+                  <h3 className="font-bold text-base sm:text-lg text-slate-900 mt-0.5">
+                    {selectedIncident.studentNameAr}
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    {selectedIncident.college} | الرقم الجامعي: {selectedIncident.studentIdNumber}
+                  </p>
+                </div>
+
+                <div className="text-end">
+                  <span className="text-[11px] text-slate-400 block">فترة التأخير</span>
+                  <span className="text-sm font-bold font-mono text-rose-600">
+                    {selectedIncident.daysOverdue} يوماً
+                  </span>
+                </div>
+              </div>
+
+              {/* Equipment info */}
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+                <div>العهدة المحتجزة: <strong className="text-slate-900">{selectedIncident.equipmentNameAr}</strong></div>
+                <div>الرقم التسلسلي: <strong className="font-mono text-slate-900">{selectedIncident.assignedSerial}</strong></div>
+                <div>قيمة الأصل التقديرية: <strong className="font-mono text-slate-900">{selectedIncident.assetValueSar.toLocaleString()} ريال سعودي</strong></div>
+              </div>
+
+              {/* Quick Communication Trigger buttons */}
+              <div className="space-y-3">
+                <h4 className="font-bold text-xs sm:text-sm text-slate-900">
+                  إرسال إنذار فوري وتوثيق المحاولة:
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <button
+                    onClick={() => sendOverdueReminder(selectedIncident.id, 'sms')}
+                    className="p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold flex items-center justify-center gap-2 transition min-h-[44px]"
+                  >
+                    <MessageSquare className="w-4 h-4 text-[#0284c7]" />
+                    <span>رسالة SMS فورية</span>
+                  </button>
+
+                  <button
+                    onClick={() => sendOverdueReminder(selectedIncident.id, 'email')}
+                    className="p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold flex items-center justify-center gap-2 transition min-h-[44px]"
+                  >
+                    <Mail className="w-4 h-4 text-amber-600" />
+                    <span>إنذار بريد الكتروني</span>
+                  </button>
+
+                  <button
+                    onClick={() => sendOverdueReminder(selectedIncident.id, 'phone')}
+                    className="p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold flex items-center justify-center gap-2 transition min-h-[44px]"
+                  >
+                    <Phone className="w-4 h-4 text-emerald-600" />
+                    <span>توثيق اتصال هاتفي</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Academic Hold Action */}
+              <div className="p-4 rounded-xl border border-rose-200 bg-rose-50/50 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-bold text-xs sm:text-sm text-rose-950 flex items-center gap-1.5">
+                      <Ban className="w-4 h-4 text-rose-600" />
+                      <span>الحجز الأكاديمي (إيقاف الخدمات الجامعية):</span>
+                    </h4>
+                    <p className="text-[11px] text-rose-800 mt-0.5">
+                      يمنع الطالب من تسجيل المقررات أو استلام وثيقة التخرج حتى تسليم العهدة.
+                    </p>
+                  </div>
+                </div>
+
+                {selectedIncident.academicHoldPlaced ? (
+                  <button
+                    onClick={() => removeAcademicHold(selectedIncident.id)}
+                    className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-xs transition shadow-xs min-h-[42px]"
+                  >
+                    إلغاء الحجز الأكاديمي وإعادة تفعيل الخدمات
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => placeAcademicHold(selectedIncident.id)}
+                    className="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition shadow-xs min-h-[42px]"
+                  >
+                    تطبيق الحجز الأكاديمي الفوري في البوابة
+                  </button>
+                )}
+              </div>
+
+              {/* Contact History Log */}
+              <div className="space-y-2">
+                <h4 className="font-bold text-xs text-slate-700">
+                  سجل الإنذارات والمتابعات الرسمية ({selectedIncident.contactAttempts.length}):
+                </h4>
+                <div className="space-y-1.5 max-h-44 overflow-y-auto">
+                  {selectedIncident.contactAttempts.map((att, idx) => (
+                    <div key={idx} className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-xs flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] text-slate-400">{att.date}</span>
+                        <span className="text-slate-700">{att.note}</span>
+                      </div>
+                      <span className="text-[10px] font-bold text-[#0284c7] bg-sky-50 px-2 py-0.5 rounded">
+                        {att.method.toUpperCase()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-400">
+              اختر حالة متأخرة لمراجعة الإجراءات
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Escalation & Notification Modal */}
-      {selectedIncident && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative">
-            <button
-              onClick={() => setSelectedIncident(null)}
-              className="absolute top-4 end-4 text-slate-400 hover:text-slate-600 text-lg"
-            >
-              ✕
-            </button>
-
-            <h3 className="text-base font-bold text-[#00236f] mb-1">
-              إرسال إنذار أكاديمي رسمي للطالب المتأخر
-            </h3>
-            <p className="text-xs text-slate-500 mb-4">
-              الطالب: <strong>{selectedIncident.studentNameAr}</strong> ({selectedIncident.studentPhone})
-            </p>
-
-            {notificationSent ? (
-              <div className="text-center py-6">
-                <Check className="w-12 h-12 text-emerald-600 mx-auto mb-2" />
-                <h4 className="text-sm font-bold text-slate-800">تم إرسال الإنذار بنجاح</h4>
-                <p className="text-xs text-slate-500 mt-1">
-                  تم توثيق المحاولة في سجل التواصل المعملي
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSendReminder} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    قناة التواصل المباشر
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setContactMethod('sms')}
-                      className={`p-2 rounded text-xs font-bold border transition ${
-                        contactMethod === 'sms'
-                          ? 'bg-[#00236f] text-white border-[#00236f]'
-                          : 'bg-white border-slate-200 text-slate-700'
-                      }`}
-                    >
-                      رسالة نصية SMS
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setContactMethod('email')}
-                      className={`p-2 rounded text-xs font-bold border transition ${
-                        contactMethod === 'email'
-                          ? 'bg-[#00236f] text-white border-[#00236f]'
-                          : 'bg-white border-slate-200 text-slate-700'
-                      }`}
-                    >
-                      بريد جامعي رسمي
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setContactMethod('phone')}
-                      className={`p-2 rounded text-xs font-bold border transition ${
-                        contactMethod === 'phone'
-                          ? 'bg-[#00236f] text-white border-[#00236f]'
-                          : 'bg-white border-slate-200 text-slate-700'
-                      }`}
-                    >
-                      اتصال هاتفي
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">نص الإنذار:</label>
-                  <textarea
-                    rows={3}
-                    value={reminderNote}
-                    onChange={(e) => setReminderNote(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded text-xs outline-none focus:ring-1 focus:ring-[#0284c7]"
-                  />
-                </div>
-
-                {/* Historical Attempts */}
-                <div>
-                  <div className="text-[11px] font-bold text-slate-500 mb-1">سجل المحاولات السابقة:</div>
-                  <div className="space-y-1.5 max-h-32 overflow-y-auto bg-slate-50 p-2 rounded border border-slate-200 text-[11px] text-slate-600">
-                    {selectedIncident.contactAttempts.map((att, i) => (
-                      <div key={i} className="flex justify-between border-b border-slate-200/60 pb-1">
-                        <span>• [{att.method.toUpperCase()}] {att.note}</span>
-                        <span className="font-mono text-slate-400">{att.date}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex gap-2 pt-2">
-                  <button
-                    type="submit"
-                    className="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 rounded transition"
-                  >
-                    تأكيد إرسال الإشعار وتوثيق السجل
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedIncident(null)}
-                    className="bg-slate-100 text-slate-700 text-xs font-semibold px-4 py-2 rounded"
-                  >
-                    إلغاء
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

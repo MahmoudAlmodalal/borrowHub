@@ -1,296 +1,346 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useBorrowHubStore } from '@/lib/store';
 import { LoanRecord } from '@/lib/types';
-import { 
-  Check, X, Eye, FileText, Search, Filter, CheckCircle2, 
-  Clock, ShieldAlert, ArrowUpRight
+import {
+  Check,
+  X,
+  Eye,
+  Search,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  Sparkles,
+  ShieldAlert,
+  ArrowRight,
+  ClipboardCheck,
+  User,
+  Building,
+  Calendar,
 } from 'lucide-react';
 
 export default function RequestsReviewQueuePage() {
-  const { loans, approveLoanRequest, rejectLoanRequest } = useBorrowHubStore();
-  const [activeFilter, setActiveFilter] = useState<'pending' | 'approved' | 'all'>('pending');
+  const { loans, approveLoan, rejectLoan, setRole } = useBorrowHubStore();
+  const [filterStatus, setFilterStatus] = useState<'pending' | 'approved' | 'all'>('pending');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLoan, setSelectedLoan] = useState<LoanRecord | null>(null);
-  const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [assignedSerial, setAssignedSerial] = useState('');
+  const [rejectionReason, setRejectionReason] = useState('');
+  const [showRejectModal, setShowRejectModal] = useState(false);
 
-  const pendingLoans = loans.filter((l) => l.status === 'pending_approval');
+  const pendingCount = loans.filter((l) => l.status === 'pending_approval').length;
+
   const filteredLoans = loans.filter((l) => {
-    const matchStatus =
-      activeFilter === 'all'
-        ? true
-        : activeFilter === 'pending'
-        ? l.status === 'pending_approval'
-        : l.status === 'approved_ready_for_pickup';
-    const matchSearch =
+    if (filterStatus === 'pending') return l.status === 'pending_approval';
+    if (filterStatus === 'approved') return l.status === 'approved_ready_for_pickup' || l.status === 'active_in_possession';
+    return true;
+  }).filter((l) => {
+    return (
       l.studentNameAr.includes(searchQuery) ||
       l.equipmentNameAr.includes(searchQuery) ||
-      l.token.includes(searchQuery) ||
-      l.projectTitle.includes(searchQuery);
-    return matchStatus && matchSearch;
+      l.token.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      l.college.includes(searchQuery)
+    );
   });
 
-  const handleApprove = (loanId: string, title: string) => {
-    approveLoanRequest(loanId);
-    setActionMessage(`تمت الموافقة بنجاح على طلب استعارة: ${title}`);
-    setTimeout(() => setActionMessage(null), 4000);
+  const handleOpenReview = (loan: LoanRecord) => {
+    setSelectedLoan(loan);
+    setAssignedSerial(
+      loan.assignedSerial && loan.assignedSerial !== 'لم يخصص بعد' && !loan.assignedSerial.includes('قيد')
+        ? loan.assignedSerial
+        : 'SN-ENG-' + Math.floor(1000 + Math.random() * 9000)
+    );
   };
 
-  const handleReject = (loanId: string, title: string) => {
-    rejectLoanRequest(loanId, 'تعارض مع جدول الصيانة المجدول');
-    setActionMessage(`تم رفض طلب استعارة: ${title}`);
-    setTimeout(() => setActionMessage(null), 4000);
+  const handleApprove = () => {
+    if (!selectedLoan) return;
+    approveLoan(selectedLoan.id, assignedSerial);
+    setSelectedLoan(null);
+  };
+
+  const handleReject = () => {
+    if (!selectedLoan) return;
+    rejectLoan(selectedLoan.id, rejectionReason);
+    setShowRejectModal(false);
+    setSelectedLoan(null);
+    setRejectionReason('');
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6" dir="rtl">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold mb-1">
-            <span>SCR-07</span>
-            <span>·</span>
-            <span>طابور مراجعة وإقرار طلبات الاستعارة</span>
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
+              طابور مراجعة واعتماد طلبات الاستعارة (Supervisor Review Queue)
+            </h1>
           </div>
-          <h1 className="text-2xl font-bold text-[#00236f]">إدارة عهد المعامل والطلبات المعلقة</h1>
-          <p className="text-xs text-slate-500">
-            مراجعة مسوغات المشاريع الأكاديمية والموافقة على تسليم العهد المعملية للطلاب
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            صلاحيات مشرف المعمل واللجنة الأكاديمية للموافقة على المشاريع وتعيين الأرقام التسلسلية
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm flex items-center gap-3 text-xs">
-            <span className="text-slate-500">طلبات بانتظار إقرارك:</span>
-            <span className="font-mono font-bold text-base text-[#00236f] bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded">
-              {pendingLoans.length}
-            </span>
-          </div>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/overdue"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition shadow-xs min-h-[44px]"
+          >
+            <ShieldAlert className="w-4 h-4 text-rose-500" />
+            <span>لوحة المتأخرات</span>
+          </Link>
         </div>
       </div>
 
-      {actionMessage && (
-        <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-xs font-bold mb-6 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-2">
-            <Check className="w-4 h-4 text-emerald-600" />
-            <span>{actionMessage}</span>
-          </div>
-          <button onClick={() => setActionMessage(null)}>✕</button>
+      {/* Role Connection Banner */}
+      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm text-amber-950">
+        <div className="flex items-center gap-2.5">
+          <Sparkles className="w-5 h-5 text-amber-600 shrink-0" />
+          <span>
+            بمجرد اعتمادك لأي طلب، ينتقل آلياً إلى <strong>شباك التسليم (Pickups Counter)</strong> ليتمكن فني المعمل من تسليمه للطالب فور حضوره.
+          </span>
         </div>
-      )}
+        <button
+          onClick={() => {
+            setRole('counter_tech');
+            window.location.href = '/pickups';
+          }}
+          className="text-xs font-bold text-amber-900 bg-amber-200/70 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition whitespace-nowrap self-start sm:self-auto min-h-[36px] flex items-center"
+        >
+          معاينة شباك التسليم ←
+        </button>
+      </div>
 
-      {/* Filter and Search Bar */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 mb-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        {/* Search */}
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute start-3 top-2.5" />
+      {/* Filters & Search */}
+      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <div className="relative w-full sm:w-80">
+          <Search className="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 start-3" />
           <input
             type="text"
-            placeholder="بحث باسم الطالب، الجهاز، رمز الطلب، أو عنوان المشروع..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full ps-9 pe-3 py-2 bg-slate-50 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-[#0284c7] outline-none"
+            placeholder="ابحث باسم الطالب، الجهاز، أو كود الطلب..."
+            className="w-full ps-9 pe-3 py-2 rounded-lg border border-slate-200 text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none min-h-[40px]"
           />
         </div>
 
-        {/* Status Filter Buttons */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setActiveFilter('pending')}
-            className={`px-3 py-1.5 rounded text-xs font-semibold transition ${
-              activeFilter === 'pending'
-                ? 'bg-[#00236f] text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-            }`}
-          >
-            المعلقة ({pendingLoans.length})
-          </button>
-          <button
-            onClick={() => setActiveFilter('approved')}
-            className={`px-3 py-1.5 rounded text-xs font-semibold transition ${
-              activeFilter === 'approved'
-                ? 'bg-[#00236f] text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-            }`}
-          >
-            المعتمدة للشباك
-          </button>
-          <button
-            onClick={() => setActiveFilter('all')}
-            className={`px-3 py-1.5 rounded text-xs font-semibold transition ${
-              activeFilter === 'all'
-                ? 'bg-[#00236f] text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-            }`}
-          >
-            الكل
-          </button>
+        <div className="flex items-center gap-1.5 w-full sm:w-auto">
+          {[
+            { id: 'pending', label: 'بانتظار الاعتماد', count: pendingCount },
+            { id: 'approved', label: 'الطلبات المعتمدة' },
+            { id: 'all', label: 'كافة الطلبات' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setFilterStatus(tab.id as any)}
+              className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-bold transition min-h-[38px] ${
+                filterStatus === tab.id
+                  ? 'bg-[#00236f] text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <span>{tab.label}</span>
+              {tab.count !== undefined && tab.count > 0 && (
+                <span className="ms-1.5 px-1.5 py-0.5 rounded-full text-[10px] bg-amber-400 text-slate-900 font-mono">
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* High-Density Requests Table */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-start text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold">
-                <th className="py-3 px-4 text-start">رمز الطلب</th>
-                <th className="py-3 px-4 text-start">الطالب المستعير</th>
-                <th className="py-3 px-4 text-start">المعدة المطلوبة</th>
-                <th className="py-3 px-4 text-start">مشروع التخرج / المسوغ</th>
-                <th className="py-3 px-4 text-start">تاريخ التقديم</th>
-                <th className="py-3 px-4 text-start">الحالة</th>
-                <th className="py-3 px-4 text-center">الإجراء</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {filteredLoans.length > 0 ? (
-                filteredLoans.map((loan, idx) => {
+      {/* Requests Table / Cards */}
+      {filteredLoans.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500 space-y-2">
+          <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
+          <h3 className="font-bold text-sm text-slate-800">طابور المراجعة فارغ تماماً</h3>
+          <p className="text-xs text-slate-400">
+            لا توجد طلبات جديدة معلقة حالياً بانتظار الاعتماد.
+          </p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-start text-xs sm:text-sm">
+              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+                <tr>
+                  <th className="p-3.5 text-start">رمز الطلب</th>
+                  <th className="p-3.5 text-start">الطالب والكلية</th>
+                  <th className="p-3.5 text-start">الجهاز المطلوب</th>
+                  <th className="p-3.5 text-start">مشروع التخرج / المشرف</th>
+                  <th className="p-3.5 text-start">الحالة</th>
+                  <th className="p-3.5 text-center">الإجراء الأكاديمي</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredLoans.map((loan) => {
                   const isPending = loan.status === 'pending_approval';
                   return (
-                    <tr
-                      key={loan.id}
-                      className={`hover:bg-slate-50 transition-colors ${
-                        idx % 2 === 0 ? 'bg-white' : 'bg-[#f7f9fb]/40'
-                      }`}
-                    >
-                      <td className="py-3.5 px-4 font-mono font-bold text-[#00236f]">
+                    <tr key={loan.id} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="p-3.5 font-mono font-bold text-slate-900 whitespace-nowrap">
                         {loan.token}
                       </td>
-                      <td className="py-3.5 px-4">
-                        <div className="font-bold text-slate-800">{loan.studentNameAr}</div>
-                        <div className="text-[11px] text-slate-500">{loan.college}</div>
+                      <td className="p-3.5 whitespace-nowrap">
+                        <div className="font-bold text-slate-900">{loan.studentNameAr}</div>
+                        <div className="text-[11px] text-slate-400">{loan.college}</div>
                       </td>
-                      <td className="py-3.5 px-4">
-                        <div className="font-semibold text-[#00236f]">{loan.equipmentNameAr}</div>
-                        <div className="text-[11px] text-slate-400 font-mono">
-                          الاستحقاق: {loan.dueDate}
-                        </div>
+                      <td className="p-3.5">
+                        <div className="font-semibold text-slate-900">{loan.equipmentNameAr}</div>
+                        <div className="text-[11px] text-slate-400 font-mono">تاريخ الإرجاع: {loan.dueDate}</div>
                       </td>
-                      <td className="py-3.5 px-4 max-w-xs truncate" title={loan.projectTitle}>
-                        <div className="text-slate-700 truncate">{loan.projectTitle}</div>
-                        <div className="text-[11px] text-slate-400">إشراف: {loan.supervisorName}</div>
+                      <td className="p-3.5 max-w-xs">
+                        <div className="text-xs text-slate-700 line-clamp-1">{loan.projectTitle}</div>
+                        <div className="text-[11px] text-slate-400">المشرف: {loan.supervisorName}</div>
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">
-                        {loan.requestDate}
-                      </td>
-                      <td className="py-3.5 px-4">
+                      <td className="p-3.5 whitespace-nowrap">
                         {isPending ? (
-                          <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold border border-amber-200">
-                            <Clock className="w-3 h-3 text-amber-600" />
-                            <span>بانتظار الاعتماد</span>
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                            <Clock className="w-3 h-3" />
+                            بانتظار المشرف
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded text-[11px] font-bold border border-emerald-200">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                            <span>معتمد للشباك</span>
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                            <CheckCircle2 className="w-3 h-3" />
+                            معتمد
                           </span>
                         )}
                       </td>
-                      <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                        <div className="flex items-center justify-center gap-1.5">
+                      <td className="p-3.5 text-center whitespace-nowrap">
+                        {isPending ? (
                           <button
-                            onClick={() => setSelectedLoan(loan)}
-                            title="عرض التفاصيل الكاملة"
-                            className="p-1.5 rounded hover:bg-slate-100 text-slate-600 transition"
+                            onClick={() => handleOpenReview(loan)}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#00236f] hover:bg-[#001b55] text-white text-xs font-bold transition shadow-xs min-h-[38px]"
                           >
-                            <Eye className="w-4 h-4" />
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>مراجعة واعتماد</span>
                           </button>
-                          {isPending && (
-                            <>
-                              <button
-                                onClick={() => handleApprove(loan.id, loan.equipmentNameAr)}
-                                className="bg-[#00236f] hover:bg-[#0284c7] text-white text-[11px] font-bold px-3 py-1.5 rounded transition flex items-center gap-1 shadow-sm"
-                              >
-                                <Check className="w-3 h-3" />
-                                <span>موافقة</span>
-                              </button>
-                              <button
-                                onClick={() => handleReject(loan.id, loan.equipmentNameAr)}
-                                className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-[11px] font-bold px-2 py-1.5 rounded transition"
-                              >
-                                رفض
-                              </button>
-                            </>
-                          )}
-                        </div>
+                        ) : (
+                          <span className="text-xs text-slate-400 font-mono">
+                            {loan.assignedSerial}
+                          </span>
+                        )}
                       </td>
                     </tr>
                   );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
-                    لا توجد طلبات استعارة مطابقة لمعايير البحث الحالية
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Application Details Modal */}
+      {/* Review Modal */}
       {selectedLoan && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative">
-            <button
-              onClick={() => setSelectedLoan(null)}
-              className="absolute top-4 end-4 text-slate-400 hover:text-slate-600 text-lg"
-            >
-              ✕
-            </button>
-
-            <div className="flex items-center gap-2 mb-2">
-              <span className="font-mono text-xs bg-slate-100 px-2 py-0.5 rounded font-bold">
-                {selectedLoan.token}
-              </span>
-              <span className="text-xs text-slate-400">تاريخ التقديم: {selectedLoan.requestDate}</span>
-            </div>
-
-            <h3 className="text-base font-bold text-[#00236f] mb-3">تفاصيل مسوغ الاستعارة الأكاديمية</h3>
-
-            <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs mb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200" dir="rtl">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <span className="text-slate-400 block mb-0.5">الجهاز المطلوب:</span>
-                <span className="font-bold text-[#00236f]">{selectedLoan.equipmentNameAr}</span>
+                <span className="text-[11px] font-mono font-bold text-amber-600 block">
+                  طلب رقم: {selectedLoan.token}
+                </span>
+                <h3 className="font-bold text-base text-slate-900">
+                  مراجعة طلب استعارة: {selectedLoan.equipmentNameAr}
+                </h3>
               </div>
-              <div>
-                <span className="text-slate-400 block mb-0.5">اسم الطالب المستعير:</span>
-                <span className="font-bold text-slate-800">{selectedLoan.studentNameAr} ({selectedLoan.college})</span>
-              </div>
-              <div>
-                <span className="text-slate-400 block mb-0.5">عنوان المشروع / التجربة المعملية:</span>
-                <span className="text-slate-700 leading-relaxed font-medium">{selectedLoan.projectTitle}</span>
-              </div>
-              <div>
-                <span className="text-slate-400 block mb-0.5">المشرف الأكاديمي المسؤول:</span>
-                <span className="text-slate-800 font-semibold">{selectedLoan.supervisorName}</span>
-              </div>
-              <div>
-                <span className="text-slate-400 block mb-0.5">ملاحظات النظام:</span>
-                <span className="text-slate-600">{selectedLoan.notes}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end gap-2">
-              {selectedLoan.status === 'pending_approval' && (
-                <button
-                  onClick={() => {
-                    handleApprove(selectedLoan.id, selectedLoan.equipmentNameAr);
-                    setSelectedLoan(null);
-                  }}
-                  className="bg-[#00236f] hover:bg-[#0284c7] text-white text-xs font-bold px-4 py-2 rounded transition flex items-center gap-1.5"
-                >
-                  <Check className="w-3.5 h-3.5" />
-                  <span>اعتماد الطلب فوراً</span>
-                </button>
-              )}
               <button
                 onClick={() => setSelectedLoan(null)}
-                className="bg-slate-100 text-slate-700 text-xs font-semibold px-4 py-2 rounded"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
               >
-                إغلاق
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+              <div className="flex justify-between">
+                <span className="text-slate-500">الطالب:</span>
+                <strong className="text-slate-900">{selectedLoan.studentNameAr} ({selectedLoan.college})</strong>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">مشروع التخرج:</span>
+                <strong className="text-slate-900 max-w-[260px] text-end">{selectedLoan.projectTitle}</strong>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">المشرف الأكاديمي:</span>
+                <strong className="text-slate-900">{selectedLoan.supervisorName}</strong>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">تاريخ الإرجاع المطلوب:</span>
+                <strong className="text-slate-900 font-mono">{selectedLoan.dueDate}</strong>
+              </div>
+              {selectedLoan.notes && (
+                <div className="border-t border-slate-200 pt-2 text-slate-600">
+                  ملاحظات الطالب: {selectedLoan.notes}
+                </div>
+              )}
+            </div>
+
+            {/* Serial Assignment */}
+            <div>
+              <label className="block text-xs font-bold text-slate-800 mb-1">
+                تخصيص الرقم التسلسلي الفيزيائي للجهاز (Serial Number):
+              </label>
+              <input
+                type="text"
+                value={assignedSerial}
+                onChange={(e) => setAssignedSerial(e.target.value)}
+                required
+                placeholder="مثال: SN-OSC-4091-A"
+                className="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-xs sm:text-sm font-mono focus:ring-2 focus:ring-amber-500 focus:outline-none min-h-[42px]"
+              />
+              <span className="text-[11px] text-slate-400 mt-1 block">
+                سيتم تدبيج هذا السيريال على بطاقة التسليم في شباك فني المعمل.
+              </span>
+            </div>
+
+            {/* Action CTAs */}
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-3">
+              <button
+                onClick={handleApprove}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-xs min-h-[44px]"
+              >
+                <Check className="w-4 h-4" />
+                <span>اعتماد الطلب وتحويله للشباك</span>
+              </button>
+
+              <button
+                onClick={() => setShowRejectModal(true)}
+                className="py-2.5 px-4 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition min-h-[44px]"
+              >
+                رفض
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject Modal */}
+      {showRejectModal && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-900/70" dir="rtl">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+            <h3 className="font-bold text-sm text-slate-900">تأكيد رفض طلب الاستعارة</h3>
+            <textarea
+              value={rejectionReason}
+              onChange={(e) => setRejectionReason(e.target.value)}
+              placeholder="اكتب سبب الرفض الأكاديمي (مثال: تعارض مواعيد، عدم اكتمال موافقات القسم)..."
+              rows={3}
+              className="w-full p-2.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={handleReject}
+                className="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg transition"
+              >
+                تأكيد الرفض
+              </button>
+              <button
+                onClick={() => setShowRejectModal(false)}
+                className="px-3 py-2 bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-200"
+              >
+                إلغاء
               </button>
             </div>
           </div>

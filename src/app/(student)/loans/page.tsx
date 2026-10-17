@@ -3,413 +3,371 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useBorrowHubStore } from '@/lib/store';
-import { LoanRecord } from '@/lib/types';
-import { 
-  Clock, QrCode, ArrowUpRight, CheckCircle2, AlertCircle, 
-  Layers, Calendar, ShieldCheck, X
+import { LoanRecord, LoanStatus } from '@/lib/types';
+import {
+  Clock,
+  QrCode,
+  CheckCircle2,
+  AlertCircle,
+  Calendar,
+  AlertTriangle,
+  RotateCcw,
+  Sparkles,
+  Search,
+  X,
+  Printer,
+  ChevronLeft,
+  ArrowRight,
+  ShieldCheck,
+  Building,
+  User,
+  Plus,
 } from 'lucide-react';
 
-export default function StudentLoansPortalPage() {
-  const { loans } = useBorrowHubStore();
-  const [activeTab, setActiveTab] = useState<'active' | 'ready' | 'pending' | 'history'>('active');
-  const [selectedBarcodeLoan, setSelectedBarcodeLoan] = useState<LoanRecord | null>(null);
-  const [extensionModalLoan, setExtensionModalLoan] = useState<LoanRecord | null>(null);
-  const [extensionSuccess, setExtensionSuccess] = useState(false);
+export default function StudentLoansPage() {
+  const { loans, requestExtension, currentRole, setRole } = useBorrowHubStore();
+  const [activeTab, setActiveTab] = useState<'all' | 'active' | 'ready' | 'pending' | 'history'>('all');
+  const [selectedLoanForBarcode, setSelectedLoanForBarcode] = useState<LoanRecord | null>(null);
 
-  const activeLoans = loans.filter((l) => l.status === 'active_in_possession' || l.status === 'overdue');
+  const filteredLoans = loans.filter((loan) => {
+    if (activeTab === 'active') return loan.status === 'active_in_possession';
+    if (activeTab === 'ready') return loan.status === 'approved_ready_for_pickup';
+    if (activeTab === 'pending') return loan.status === 'pending_approval';
+    if (activeTab === 'history') return loan.status === 'returned_inspected';
+    return true;
+  });
+
   const readyLoans = loans.filter((l) => l.status === 'approved_ready_for_pickup');
-  const pendingLoans = loans.filter((l) => l.status === 'pending_approval');
-  const historyLoans = loans.filter((l) => l.status === 'returned_cleared' || l.status === 'rejected');
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Portal Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6" dir="rtl">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#0284c7]/10 text-[#0284c7] text-xs font-semibold mb-1">
-            <span>SCR-03</span>
-            <span>·</span>
-            <span>لوحة حساب الطالب</span>
-          </div>
-          <h1 className="text-2xl font-bold text-[#00236f]">طلبات واستعارات الطالب</h1>
-          <p className="text-xs text-slate-500">
-            متابعة العهد الشخصية، استلام الأجهزة المعتمدة عبر الباركود، ومتابعة تواريخ الاستحقاق.
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
+            لوحة استعاراتي وتذاكر الاستلام الأكاديمية
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            تابع حالة طلباتك المعملية، أظهر باركود الاستلام عند الشباك، وقدم طلبات التمديد
           </p>
         </div>
 
-        <Link
-          href="/catalog"
-          className="inline-flex items-center gap-1.5 bg-[#00236f] hover:bg-[#0284c7] text-white text-xs font-semibold px-4 py-2 rounded transition whitespace-nowrap self-start md:self-auto"
-        >
-          <span>طلب استعارة جديدة</span>
-          <ArrowUpRight className="w-3.5 h-3.5" />
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/catalog"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#00236f] hover:bg-[#001b55] text-white transition shadow-xs min-h-[44px]"
+          >
+            <Plus className="w-4 h-4" />
+            <span>طلب جهاز جديد من الكتالوج</span>
+          </Link>
+        </div>
       </div>
 
-      {/* KPI Metrics Ribbon */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div className="text-xs text-slate-500 font-medium mb-1">العهد الحالية في حيازتي</div>
-          <div className="text-2xl font-bold text-[#00236f] font-mono">{activeLoans.length}</div>
-          <div className="text-[11px] text-emerald-600 mt-1 flex items-center gap-1">
-            <CheckCircle2 className="w-3 h-3" />
-            <span>مسؤولة بالكامل</span>
+      {/* Role Link Notice: If Ready Pickups exist */}
+      {readyLoans.length > 0 && (
+        <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
+              <QrCode className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm sm:text-base text-emerald-950">
+                لديك {readyLoans.length} جهاز معتمد بانتظار استلامك من الشباك المعملي!
+              </h3>
+              <p className="text-xs text-emerald-800 mt-0.5">
+                توجّه إلى شباك المعمل وقدم الباركود أو رمز الطلب (Token) الموضح أدناه لفني الشباك.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div className="text-xs text-slate-500 font-medium mb-1">جاهزة للاستلام بالشباك</div>
-          <div className="text-2xl font-bold text-[#0284c7] font-mono">{readyLoans.length}</div>
-          <div className="text-[11px] text-[#0284c7] mt-1 flex items-center gap-1">
-            <QrCode className="w-3 h-3" />
-            <span>يتطلب مسح الباركود</span>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div className="text-xs text-slate-500 font-medium mb-1">طلبات قيد المراجعة</div>
-          <div className="text-2xl font-bold text-[#f59e0b] font-mono">{pendingLoans.length}</div>
-          <div className="text-[11px] text-slate-400 mt-1">بانتظار موافقة المشرف</div>
-        </div>
-
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <div className="text-xs text-slate-500 font-medium mb-1">سجل العهد السابقة</div>
-          <div className="text-2xl font-bold text-slate-700 font-mono">{historyLoans.length}</div>
-          <div className="text-[11px] text-slate-400 mt-1">مكتملة ومبرأة الذمة</div>
-        </div>
-      </div>
-
-      {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 mb-6 overflow-x-auto pb-1">
-        <button
-          onClick={() => setActiveTab('active')}
-          className={`px-4 py-2 text-xs font-bold rounded-t transition-all whitespace-nowrap ${
-            activeTab === 'active'
-              ? 'border-b-2 border-[#00236f] text-[#00236f] bg-white'
-              : 'text-slate-500 hover:text-slate-800'
-          }`}
-        >
-          العهد الحالية ({activeLoans.length})
-        </button>
-        <button
-          onClick={() => setActiveTab('ready')}
-          className={`px-4 py-2 text-xs font-bold rounded-t transition-all whitespace-nowrap ${
-            activeTab === 'ready'
-              ? 'border-b-2 border-[#00236f] text-[#00236f] bg-white'
-              : 'text-slate-500 hover:text-slate-800'
-          }`}
-        >
-          جاهزة للاستلام ({readyLoans.length})
-        </button>
-        <button
-          onClick={() => setActiveTab('pending')}
-          className={`px-4 py-2 text-xs font-bold rounded-t transition-all whitespace-nowrap ${
-            activeTab === 'pending'
-              ? 'border-b-2 border-[#00236f] text-[#00236f] bg-white'
-              : 'text-slate-500 hover:text-slate-800'
-          }`}
-        >
-          قيد المراجعة ({pendingLoans.length})
-        </button>
-        <button
-          onClick={() => setActiveTab('history')}
-          className={`px-4 py-2 text-xs font-bold rounded-t transition-all whitespace-nowrap ${
-            activeTab === 'history'
-              ? 'border-b-2 border-[#00236f] text-[#00236f] bg-white'
-              : 'text-slate-500 hover:text-slate-800'
-          }`}
-        >
-          السجل التاريخي ({historyLoans.length})
-        </button>
-      </div>
-
-      {/* Tab 1: Active Loans */}
-      {activeTab === 'active' && (
-        <div className="space-y-4">
-          {activeLoans.length > 0 ? (
-            activeLoans.map((loan) => (
-              <div
-                key={loan.id}
-                className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:border-[#0284c7] transition flex flex-col md:flex-row md:items-center justify-between gap-4"
-              >
-                <div>
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="font-mono text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-semibold">
-                      {loan.assignedSerial}
-                    </span>
-                    <span className="text-xs text-slate-400 font-mono">{loan.token}</span>
-                    {loan.status === 'overdue' && (
-                      <span className="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded">
-                        متأخر عن موعد الإرجاع
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="text-base font-bold text-[#00236f] mb-1">{loan.equipmentNameAr}</h3>
-                  <p className="text-xs text-slate-600 mb-2">المشروع: {loan.projectTitle}</p>
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-[#0284c7]" />
-                      <span>تاريخ الاستلام: {loan.pickupDate}</span>
-                    </span>
-                    <span className="flex items-center gap-1 font-semibold text-slate-800">
-                      <Clock className="w-3.5 h-3.5 text-amber-600" />
-                      <span>تاريخ الاستحقاق: {loan.dueDate}</span>
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    onClick={() => {
-                      setExtensionModalLoan(loan);
-                      setExtensionSuccess(false);
-                    }}
-                    className="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold px-3.5 py-2 rounded transition"
-                  >
-                    طلب تمديد
-                  </button>
-                  <button
-                    onClick={() => setSelectedBarcodeLoan(loan)}
-                    className="bg-[#00236f] hover:bg-[#0284c7] text-white text-xs font-semibold px-3.5 py-2 rounded transition flex items-center gap-1.5"
-                  >
-                    <QrCode className="w-3.5 h-3.5" />
-                    <span>بطاقة العهدة</span>
-                  </button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="bg-white rounded-xl border border-slate-200 text-center py-12 px-4">
-              <Layers className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-              <p className="text-sm font-bold text-slate-700">لا توجد عهد نشطة في حيازتك حالياً</p>
-              <p className="text-xs text-slate-500 mt-1">تصفح الكتالوج لتقديم طلب استعارة لأجهزتك المعملية</p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Tab 2: Ready for Pickup */}
-      {activeTab === 'ready' && (
-        <div className="space-y-4">
-          {readyLoans.length > 0 ? (
-            readyLoans.map((loan) => (
-              <div
-                key={loan.id}
-                className="bg-white rounded-xl border-2 border-[#0284c7]/40 p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
-              >
-                <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0284c7] bg-[#e0f2fe] px-2.5 py-0.5 rounded mb-2">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>معتمد من المشرف · جاهز للاستلام الآن</span>
-                  </div>
-                  <h3 className="text-base font-bold text-[#00236f] mb-1">{loan.equipmentNameAr}</h3>
-                  <p className="text-xs text-slate-600 mb-1">المشروع: {loan.projectTitle}</p>
-                  <p className="text-xs text-slate-500 font-mono">رمز الاستلام: {loan.token}</p>
-                </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    onClick={() => setSelectedBarcodeLoan(loan)}
-                    className="bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold px-4 py-2.5 rounded transition flex items-center gap-1.5 shadow"
-                  >
-                    <QrCode className="w-4 h-4" />
-                    <span>إظهار باركود الاستلام للشباك</span>
-                  </button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="bg-white rounded-xl border border-slate-200 text-center py-12 px-4">
-              <CheckCircle2 className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-              <p className="text-sm font-bold text-slate-700">لا توجد أجهزة بانتظار الاستلام</p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Tab 3: Pending Approval */}
-      {activeTab === 'pending' && (
-        <div className="space-y-4">
-          {pendingLoans.length > 0 ? (
-            pendingLoans.map((loan) => (
-              <div
-                key={loan.id}
-                className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
-              >
-                <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded mb-2">
-                    <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
-                    <span>قيد مراجعة المشرف الأكاديمي</span>
-                  </div>
-                  <h3 className="text-base font-bold text-[#00236f] mb-1">{loan.equipmentNameAr}</h3>
-                  <p className="text-xs text-slate-600 mb-1">المشروع: {loan.projectTitle}</p>
-                  <p className="text-xs text-slate-500">المشرف: {loan.supervisorName}</p>
-                </div>
-
-                <div className="text-xs text-slate-400 font-mono shrink-0">
-                  تاريخ التقديم: {loan.requestDate}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="bg-white rounded-xl border border-slate-200 text-center py-12 px-4">
-              <p className="text-sm font-bold text-slate-700">لا توجد طلبات معلقة للمراجعة</p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Tab 4: History */}
-      {activeTab === 'history' && (
-        <div className="space-y-4">
-          {historyLoans.length > 0 ? (
-            historyLoans.map((loan) => (
-              <div
-                key={loan.id}
-                className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm opacity-80 flex items-center justify-between gap-4"
-              >
-                <div>
-                  <div className="text-xs font-mono text-slate-400">{loan.token}</div>
-                  <h4 className="text-sm font-bold text-slate-700">{loan.equipmentNameAr}</h4>
-                  <div className="text-xs text-slate-500">
-                    الحالة: {loan.status === 'returned_cleared' ? 'تم الإرجاع وإبراء الذمة' : 'مرفوض'}
-                  </div>
-                </div>
-                <div className="text-xs text-slate-400 font-mono">
-                  {loan.returnDate || loan.requestDate}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="bg-white rounded-xl border border-slate-200 text-center py-12 px-4">
-              <p className="text-sm font-bold text-slate-700">سجل الاستعارات السابقة فارغ</p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Barcode Pickup Modal */}
-      {selectedBarcodeLoan && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-200 relative">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
-              onClick={() => setSelectedBarcodeLoan(null)}
-              className="absolute top-4 end-4 text-slate-400 hover:text-slate-600"
+              onClick={() => setSelectedLoanForBarcode(readyLoans[0])}
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition shadow-xs min-h-[40px]"
             >
-              <X className="w-5 h-5" />
+              <QrCode className="w-4 h-4" />
+              <span>عرض باركود الاستلام</span>
             </button>
 
-            <div className="w-12 h-12 bg-[#0284c7]/10 text-[#0284c7] rounded-full flex items-center justify-center mx-auto mb-3">
-              <QrCode className="w-6 h-6" />
+            {currentRole !== 'counter_tech' && (
+              <button
+                onClick={() => {
+                  setRole('counter_tech');
+                  window.location.href = '/pickups';
+                }}
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-white text-emerald-800 border border-emerald-300 text-xs font-semibold hover:bg-emerald-100/50 transition min-h-[40px]"
+                title="التبديل إلى دور فني الشباك لتسليم هذه العهدة فوراً"
+              >
+                <span>شاهد كفني شباك ←</span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Filter Tabs */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar border-b border-slate-200">
+        {[
+          { id: 'all', label: 'كافة الطلبات', count: loans.length },
+          { id: 'ready', label: 'جاهز للاستلام', count: readyLoans.length, highlight: readyLoans.length > 0 },
+          { id: 'active', label: 'في حيازتي حالياً', count: loans.filter((l) => l.status === 'active_in_possession').length },
+          { id: 'pending', label: 'قيد مراجعة المشرف', count: loans.filter((l) => l.status === 'pending_approval').length },
+          { id: 'history', label: 'سجل العهد المكتملة', count: loans.filter((l) => l.status === 'returned_inspected').length },
+        ].map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold border-b-2 transition whitespace-nowrap min-h-[44px] ${
+                isActive
+                  ? 'border-[#00236f] text-[#00236f] font-bold'
+                  : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+              }`}
+            >
+              <span>{tab.label}</span>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono ${
+                tab.highlight ? 'bg-emerald-100 text-emerald-800 font-bold' : 'bg-slate-100 text-slate-600'
+              }`}>
+                {tab.count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Loans List */}
+      {filteredLoans.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
+          <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
+            <Clock className="w-6 h-6" />
+          </div>
+          <h3 className="text-sm font-bold text-slate-800">لا توجد طلبات في هذا التبويب</h3>
+          <p className="text-xs text-slate-500">
+            يمكنك تصفح كتالوج الأجهزة وحجز أجهزة ومعدات جديدة لمشاريعك وأبحاثك.
+          </p>
+          <Link
+            href="/catalog"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00236f] text-white text-xs font-bold hover:bg-[#001b55] transition"
+          >
+            <span>استعراض الكتالوج الأكاديمي</span>
+            <ArrowRight className="w-4 h-4 rtl:rotate-180" />
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredLoans.map((loan) => {
+            const isReady = loan.status === 'approved_ready_for_pickup';
+            const isActive = loan.status === 'active_in_possession';
+            const isPending = loan.status === 'pending_approval';
+            const isOverdue = loan.status === 'overdue';
+            const isReturned = loan.status === 'returned_inspected';
+
+            return (
+              <div
+                key={loan.id}
+                className={`bg-white rounded-2xl border p-5 sm:p-6 transition-all shadow-xs ${
+                  isReady
+                    ? 'border-emerald-300 bg-emerald-50/20'
+                    : isOverdue
+                    ? 'border-rose-300 bg-rose-50/20'
+                    : isPending
+                    ? 'border-amber-200'
+                    : 'border-slate-200'
+                }`}
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  {/* Info block */}
+                  <div className="space-y-2 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded">
+                        {loan.token}
+                      </span>
+
+                      {/* Status Badges */}
+                      {isReady && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          معتمد - جاهز للاستلام من الشباك
+                        </span>
+                      )}
+
+                      {isActive && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300">
+                          <Clock className="w-3.5 h-3.5" />
+                          قيد الاستعارة (في حيازتك)
+                        </span>
+                      )}
+
+                      {isPending && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+                          <Clock className="w-3.5 h-3.5" />
+                          قيد مراجعة المشرف المعملي
+                        </span>
+                      )}
+
+                      {isOverdue && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300">
+                          <AlertTriangle className="w-3.5 h-3.5" />
+                          متأخر عن موعد الإرجاع
+                        </span>
+                      )}
+
+                      {isReturned && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          تم الإرجاع وإخلاء الطرف
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                      {loan.equipmentNameAr}
+                    </h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs text-slate-600 pt-1">
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                        <span>موعد التسليم المقرر: <strong className="font-mono text-slate-800">{loan.dueDate}</strong></span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-slate-400" />
+                        <span>المشرف: <strong className="text-slate-800">{loan.supervisorName}</strong></span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-mono text-slate-400">SN:</span>
+                        <span>السيريال: <strong className="font-mono text-slate-800">{loan.assignedSerial}</strong></span>
+                      </div>
+                    </div>
+
+                    {loan.projectTitle && (
+                      <p className="text-xs text-slate-500 italic">
+                        مشروع: {loan.projectTitle}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="flex flex-wrap lg:flex-col items-center gap-2 shrink-0 border-t lg:border-t-0 pt-3 lg:pt-0 border-slate-100">
+                    {/* View Barcode for Pickup */}
+                    {isReady && (
+                      <button
+                        onClick={() => setSelectedLoanForBarcode(loan)}
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition min-h-[44px]"
+                      >
+                        <QrCode className="w-4 h-4" />
+                        <span>إظهار باركود الاستلام</span>
+                      </button>
+                    )}
+
+                    {/* Extension request */}
+                    {isActive && (
+                      <button
+                        onClick={() => requestExtension(loan.id, 7)}
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition border border-slate-200 min-h-[44px]"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5 text-[#0284c7]" />
+                        <span>طلب تمديد (7 أيام)</span>
+                      </button>
+                    )}
+
+                    {/* If pending, supervisor quick link */}
+                    {isPending && currentRole === 'supervisor' && (
+                      <Link
+                        href="/review"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition min-h-[44px]"
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        <span>اعتماد في طابور المشرف</span>
+                      </Link>
+                    )}
+
+                    {/* Link to equipment specifications */}
+                    <Link
+                      href={`/catalog/${loan.equipmentId}`}
+                      className="text-xs text-[#0284c7] hover:underline px-2 py-1"
+                    >
+                      مواصفات الجهاز
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Barcode / QR Pickup Modal */}
+      {selectedLoanForBarcode && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200" dir="rtl">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                  <QrCode className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-slate-900">تذكرة الاستلام الرقمية</h3>
+                  <span className="text-[11px] text-slate-400">قدم هذا الرمز لفني الشباك المعملي</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setSelectedLoanForBarcode(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            <h3 className="text-base font-bold text-[#00236f] mb-1">بطاقة استلام العهدة المعملية</h3>
-            <p className="text-xs text-slate-500 mb-4">
-              قدم هذا الباركود لموظف شباك الاستلام لتأكيد هويتك واستلام الجهاز
-            </p>
+            {/* Stylized Barcode Graphic */}
+            <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-6 text-center space-y-3">
+              <div className="font-mono text-xl font-bold tracking-widest text-slate-900 bg-white py-2 px-4 rounded border inline-block">
+                {selectedLoanForBarcode.token}
+              </div>
 
-            {/* Generated Simulated Barcode */}
-            <div className="bg-slate-100 p-4 rounded-xl border border-slate-200 mb-4 flex flex-col items-center">
-              <div className="h-16 w-56 flex items-center justify-between gap-1 px-2 bg-white rounded border border-slate-300">
-                {Array.from({ length: 32 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`h-12 ${
-                      i % 3 === 0 ? 'w-1 bg-black' : i % 2 === 0 ? 'w-0.5 bg-black' : 'w-1.5 bg-black'
-                    }`}
+              {/* Barcode lines simulation */}
+              <div className="h-14 flex items-center justify-center gap-1 px-4 overflow-hidden select-none" aria-hidden="true">
+                {[4, 2, 6, 1, 8, 3, 2, 7, 5, 2, 4, 1, 9, 3, 5, 2, 8, 4, 2, 6, 3, 1, 7, 2, 5, 8, 2].map((h, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-slate-800 w-1 rounded-xs"
+                    style={{ height: `${h * 5 + 10}px` }}
                   />
                 ))}
               </div>
-              <div className="font-mono font-bold text-sm text-[#00236f] mt-2">
-                {selectedBarcodeLoan.token}
+
+              <div className="text-[11px] text-slate-500 font-mono">
+                كود التخصيص: {selectedLoanForBarcode.assignedSerial}
               </div>
             </div>
 
-            <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded text-start mb-4 space-y-1">
-              <div><strong>الجهاز:</strong> {selectedBarcodeLoan.equipmentNameAr}</div>
-              <div><strong>المستعير:</strong> {selectedBarcodeLoan.studentNameAr}</div>
-              <div><strong>تاريخ الاستحقاق:</strong> {selectedBarcodeLoan.dueDate}</div>
+            <div className="space-y-1 text-xs text-slate-600 bg-slate-50 p-3 rounded-lg">
+              <div>الجهاز: <strong className="text-slate-900">{selectedLoanForBarcode.equipmentNameAr}</strong></div>
+              <div>المستعير: <strong className="text-slate-900">{selectedLoanForBarcode.studentNameAr}</strong></div>
+              <div>الموعد النهائي: <strong className="text-slate-900 font-mono">{selectedLoanForBarcode.dueDate}</strong></div>
             </div>
 
-            <button
-              onClick={() => setSelectedBarcodeLoan(null)}
-              className="w-full bg-[#00236f] hover:bg-[#0284c7] text-white text-xs font-bold py-2 rounded transition"
-            >
-              إغلاق
-            </button>
-          </div>
-        </div>
-      )}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setRole('counter_tech');
+                  window.location.href = '/pickups';
+                }}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs flex items-center justify-center gap-1.5 min-h-[44px]"
+              >
+                <span>الانتقال لشباك التسليم لإتمام الاستلام ←</span>
+              </button>
 
-      {/* Loan Extension Modal */}
-      {extensionModalLoan && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative">
-            <button
-              onClick={() => setExtensionModalLoan(null)}
-              className="absolute top-4 end-4 text-slate-400 hover:text-slate-600"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <h3 className="text-base font-bold text-[#00236f] mb-1">طلب تمديد فترة استعارة العهدة</h3>
-            <p className="text-xs text-slate-500 mb-4">
-              الجهاز: {extensionModalLoan.equipmentNameAr}
-            </p>
-
-            {extensionSuccess ? (
-              <div className="text-center py-6">
-                <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                <h4 className="text-sm font-bold text-slate-800">تم رفع طلب التمديد للمشرف</h4>
-                <p className="text-xs text-slate-500 mt-1 mb-4">
-                  سيتم إشعارك فور اعتماد التمديد عبر البريد الجامعي
-                </p>
-                <button
-                  onClick={() => setExtensionModalLoan(null)}
-                  className="bg-[#00236f] text-white text-xs font-semibold px-4 py-2 rounded"
-                >
-                  حسناً
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    الأيام الإضافية المطلوبة
-                  </label>
-                  <select className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded text-xs">
-                    <option value="3">3 أيام إضافية</option>
-                    <option value="7">7 أيام إضافية (أسبوع)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    مسوغ التمديد الأكاديمي
-                  </label>
-                  <textarea
-                    rows={3}
-                    placeholder="بيان سبب الحاجة لتمديد العهدة ومرحلة المشروع الحالية..."
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded text-xs outline-none focus:ring-1 focus:ring-[#0284c7]"
-                  />
-                </div>
-
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setExtensionSuccess(true)}
-                    className="flex-1 bg-[#00236f] hover:bg-[#0284c7] text-white text-xs font-bold py-2 rounded transition"
-                  >
-                    إرسال طلب التمديد
-                  </button>
-                  <button
-                    onClick={() => setExtensionModalLoan(null)}
-                    className="bg-slate-100 text-slate-700 text-xs font-semibold px-4 py-2 rounded"
-                  >
-                    إلغاء
-                  </button>
-                </div>
-              </div>
-            )}
+              <button
+                onClick={() => setSelectedLoanForBarcode(null)}
+                className="py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition min-h-[44px]"
+              >
+                إغلاق
+              </button>
+            </div>
           </div>
         </div>
       )}

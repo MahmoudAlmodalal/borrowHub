@@ -1,297 +1,300 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useBorrowHubStore } from '@/lib/store';
 import { LoanRecord } from '@/lib/types';
-import { 
-  Scan, CheckCircle2, ShieldCheck, Star, FileText, Check, 
-  Printer, AlertTriangle, ArrowRight, User
+import {
+  Scan,
+  CheckCircle2,
+  Check,
+  Printer,
+  FileCheck,
+  Layers,
+  ClipboardList,
+  AlertTriangle,
+  Search,
+  ShieldCheck,
+  User,
+  Box,
 } from 'lucide-react';
 
 export default function ReturnsInspectionPage() {
-  const { loans, completeInspection } = useBorrowHubStore();
+  const { loans, returnLoan } = useBorrowHubStore();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedLoanId, setSelectedLoanId] = useState<string | null>(null);
+  const [mobileTab, setMobileTab] = useState<'loans' | 'inspect'>('loans');
+
+  // Inspection form state
+  const [physicalCondition, setPhysicalCondition] = useState('سليم 100% وبحالة المصنع');
+  const [accessoriesIntact, setAccessoriesIntact] = useState(true);
+  const [cleanedAndCalibrated, setCleanedAndCalibrated] = useState(true);
+  const [inspectionNotes, setInspectionNotes] = useState('');
+
   const activeLoans = loans.filter(
-    (l) => l.status === 'active_in_possession' || l.status === 'overdue'
+    (l) =>
+      (l.status === 'active_in_possession' || l.status === 'overdue') &&
+      (l.studentNameAr.includes(searchQuery) ||
+        l.token.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        l.equipmentNameAr.includes(searchQuery) ||
+        l.assignedSerial.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const [scanQuery, setScanQuery] = useState('');
-  const [selectedLoan, setSelectedLoan] = useState<LoanRecord | null>(activeLoans[0] || null);
-  const [conditionGrade, setConditionGrade] = useState<'A' | 'B' | 'C' | 'Damaged'>('A');
-  const [operationalStatus, setOperationalStatus] = useState('fully_operational');
-  const [inspectionNotes, setInspectionNotes] = useState('تم فحص الجهاز وتجريبه كهربائياً، الملحقات كاملة والعمل ممتاز.');
-  const [clearanceDone, setClearanceDone] = useState(false);
+  const selectedLoan =
+    activeLoans.find((l) => l.id === selectedLoanId) || activeLoans[0] || null;
 
-  const handleLookup = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!scanQuery) return;
-    const found = activeLoans.find(
-      (l) =>
-        l.token.toLowerCase().includes(scanQuery.toLowerCase()) ||
-        l.assignedSerial.toLowerCase().includes(scanQuery.toLowerCase()) ||
-        l.studentNameAr.includes(scanQuery)
-    );
-    if (found) {
-      setSelectedLoan(found);
-      setClearanceDone(false);
-    }
-  };
-
-  const handleClearance = () => {
+  const handleExecuteReturn = () => {
     if (!selectedLoan) return;
-    completeInspection(selectedLoan.id, conditionGrade, inspectionNotes);
-    setClearanceDone(true);
+    returnLoan(selectedLoan.id, physicalCondition, inspectionNotes);
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6" dir="rtl">
       {/* Header */}
-      <div className="bg-[#00236f] text-white rounded-xl p-6 mb-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#0284c7]/20 border border-[#0284c7]/40 text-[#5bb8fe] text-xs font-semibold mb-2">
-            <span>SCR-09</span>
-            <span>·</span>
-            <span>شباك إرجاع وفحص العتاد والمعامل</span>
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse" />
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
+              شباك فحص واستلام المرتجعات وإخلاء الطرف
+            </h1>
           </div>
-          <h1 className="text-2xl font-bold">شباك فحص الأجهزة وإبراء الذمة (SCR-08)</h1>
-          <p className="text-xs text-slate-300 mt-1">
-            الفحص الفني الدقيق، مراجعة الأرقام التسلسلية، تقييم الحالة التشغيلية، وإبراء ذمة الطالب
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            فحص الحالة الفيزيائية للأجهزة، مطابقة الملحقات، وإعادة العهدة إلى رصيد المستودع
           </p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur p-3 rounded-lg border border-white/15 text-xs text-slate-200">
-          <div>محطة الفحص: <strong className="text-white">مختبر الجودة والسلامة 104</strong></div>
-          <div className="mt-1">فني الفحص المسؤول: <strong className="text-[#5bb8fe]">طارق العمري</strong></div>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/inventory"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition shadow-xs min-h-[44px]"
+          >
+            <Box className="w-4 h-4 text-[#0284c7]" />
+            <span>مستودع الأجهزة المعملية</span>
+          </Link>
         </div>
       </div>
 
-      {/* Barcode Search Bar */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 mb-6 shadow-sm">
-        <form onSubmit={handleLookup} className="flex gap-3">
-          <div className="relative flex-1">
-            <Scan className="w-4 h-4 text-[#0284c7] absolute start-3 top-3" />
-            <input
-              type="text"
-              placeholder="امسح باركود العهدة أو الرقم التسلسلي للجهاز المسترجع..."
-              value={scanQuery}
-              onChange={(e) => setScanQuery(e.target.value)}
-              className="w-full ps-9 pe-3 py-2 bg-slate-50 border border-slate-300 rounded text-xs sm:text-sm font-mono focus:ring-1 focus:ring-[#0284c7] outline-none"
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-[#00236f] hover:bg-[#0284c7] text-white text-xs font-bold px-5 py-2 rounded transition flex items-center gap-1.5 shrink-0"
-          >
-            بحث
-          </button>
-        </form>
+      {/* Mobile Tab Switcher */}
+      <div className="lg:hidden flex rounded-xl bg-slate-200 p-1">
+        <button
+          onClick={() => setMobileTab('loans')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition ${
+            mobileTab === 'loans' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
+          }`}
+        >
+          العهد المفتوحة ({activeLoans.length})
+        </button>
+        <button
+          onClick={() => setMobileTab('inspect')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition ${
+            mobileTab === 'inspect' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
+          }`}
+        >
+          محضر الفحص والإخلاء
+        </button>
       </div>
 
-      {/* Workspace */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Right Pane: Active Loans to Return */}
-        <div className="lg:col-span-1 bg-white rounded-xl border border-slate-200 p-4 shadow-sm h-[640px] flex flex-col">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
-            <h2 className="text-xs font-bold text-[#00236f]">العهد المفتوحة في حيازة الطلاب ({activeLoans.length})</h2>
-            <span className="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold font-mono">
-              في الحيازة
-            </span>
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Col: Active Loans awaiting return (5 cols) */}
+        <div className={`lg:col-span-5 space-y-4 ${mobileTab === 'inspect' ? 'hidden lg:block' : 'block'}`}>
+          <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs space-y-3">
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 start-3" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="ابحث باسم الطالب، كود العهدة، أو السيريال..."
+                className="w-full ps-9 pe-3 py-2.5 rounded-lg border border-slate-200 text-xs sm:text-sm focus:ring-2 focus:ring-[#0284c7] focus:outline-none min-h-[44px]"
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
+              <span>العهد النشطة بالمعامل: <strong className="text-slate-800 font-mono">{activeLoans.length}</strong></span>
+              <span className="text-[11px] text-sky-600 font-semibold">بانتظار الإرجاع</span>
+            </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto space-y-2 pe-1">
-            {activeLoans.length > 0 ? (
+          <div className="space-y-2.5">
+            {activeLoans.length === 0 ? (
+              <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-slate-500 space-y-2">
+                <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto" />
+                <p className="text-xs font-semibold">كافة العهد المعملية مستلمة ولا توجد أجهزة قيد الإرجاع!</p>
+              </div>
+            ) : (
               activeLoans.map((loan) => {
                 const isSelected = selectedLoan?.id === loan.id;
+                const isOverdue = loan.status === 'overdue';
                 return (
                   <div
                     key={loan.id}
                     onClick={() => {
-                      setSelectedLoan(loan);
-                      setClearanceDone(false);
+                      setSelectedLoanId(loan.id);
+                      setMobileTab('inspect');
                     }}
-                    className={`p-3 rounded-lg border text-xs cursor-pointer transition ${
+                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-[#00236f] text-white border-[#00236f]'
-                        : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800'
+                        ? 'border-[#0284c7] bg-sky-50/40 shadow-xs ring-1 ring-[#0284c7]'
+                        : isOverdue
+                        ? 'border-rose-200 bg-rose-50/30'
+                        : 'border-slate-200 bg-white hover:border-slate-300'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-mono font-bold text-[11px]">{loan.assignedSerial}</span>
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${isSelected ? 'bg-white/20' : 'bg-slate-200'}`}>
-                        استحقاق: {loan.dueDate}
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="font-mono font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">
+                        {loan.token}
                       </span>
+                      {isOverdue ? (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-700">
+                          متأخر
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-slate-500 font-mono">
+                          حتى: {loan.dueDate}
+                        </span>
+                      )}
                     </div>
-                    <div className="font-bold mb-0.5">{loan.equipmentNameAr}</div>
-                    <div className={`text-[11px] ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
-                      المستعير: {loan.studentNameAr}
+
+                    <h4 className="font-bold text-sm text-slate-900 mt-1">
+                      {loan.equipmentNameAr}
+                    </h4>
+
+                    <div className="text-xs text-slate-600 mt-0.5 flex items-center justify-between">
+                      <span>الطالب: <strong>{loan.studentNameAr}</strong></span>
+                      <span className="font-mono text-[11px] text-slate-500">{loan.assignedSerial}</span>
                     </div>
                   </div>
                 );
               })
-            ) : (
-              <div className="text-center py-16 text-slate-400 text-xs">
-                لا توجد عهد نشطة حالياً تستوجب الإرجاع
-              </div>
             )}
           </div>
         </div>
 
-        {/* Left Pane: Technical Inspection Protocol Sheet */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+        {/* Right Col: Inspection Sheet & Discharge (7 cols) */}
+        <div className={`lg:col-span-7 ${mobileTab === 'loans' ? 'hidden lg:block' : 'block'}`}>
           {selectedLoan ? (
-            <div>
-              {/* Ticket Top */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-slate-100 gap-3">
+            <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-6">
+              <div className="flex items-start justify-between border-b border-slate-100 pb-4">
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono font-bold text-sm bg-slate-100 text-[#00236f] px-2.5 py-0.5 rounded">
-                      {selectedLoan.assignedSerial}
-                    </span>
-                    <span className="text-xs font-mono text-slate-400">
-                      {selectedLoan.token}
-                    </span>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-sky-100 text-sky-800 text-[11px] font-bold mb-1">
+                    <ClipboardList className="w-3.5 h-3.5" />
+                    <span>محضر فحص الاسترجاع وإخلاء الطرف المعملي</span>
                   </div>
-                  <h2 className="text-lg font-bold text-[#00236f]">{selectedLoan.equipmentNameAr}</h2>
+                  <h2 className="text-lg font-bold text-slate-900">
+                    {selectedLoan.equipmentNameAr}
+                  </h2>
+                  <p className="text-xs text-slate-500 font-mono mt-0.5">
+                    الرقم التسلسلي: {selectedLoan.assignedSerial} | الطلب: {selectedLoan.token}
+                  </p>
                 </div>
 
-                <div className="text-xs text-slate-500 text-end">
-                  <div>المستعير: <strong className="text-slate-800">{selectedLoan.studentNameAr}</strong></div>
-                  <div>الكلية: {selectedLoan.college}</div>
+                <div className="text-end">
+                  <span className="text-[11px] text-slate-400 block">المستعير</span>
+                  <span className="text-xs font-bold text-slate-900">
+                    {selectedLoan.studentNameAr}
+                  </span>
                 </div>
               </div>
 
-              {clearanceDone ? (
-                <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-8 text-center my-6">
-                  <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <CheckCircle2 className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-bold text-emerald-900 mb-1">
-                    تم إبراء ذمة الطالب وإعادة العهدة للمخزون!
-                  </h3>
-                  <p className="text-xs text-emerald-700 mb-4 max-w-md mx-auto">
-                    تم إغلاق ملف الاستعارة رسمياً، تحديث سجلات القيد الأكاديمي، وإعادة إتاحة الجهاز في الكتالوج العام.
-                  </p>
-                  <button
-                    onClick={() => window.print()}
-                    className="inline-flex items-center gap-1.5 bg-[#00236f] hover:bg-[#0284c7] text-white text-xs font-bold px-5 py-2 rounded transition"
-                  >
-                    <Printer className="w-4 h-4" />
-                    <span>طباعة شهادة إبراء الذمة المعملية</span>
-                  </button>
+              {/* Physical Condition Selector */}
+              <div className="space-y-3">
+                <label className="block text-xs sm:text-sm font-bold text-slate-900">
+                  حالة العهدة بعد الفحص الفيزيائي:
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[
+                    { label: 'سليم 100% وبحالة المصنع', desc: 'لا توجد أي خدوش أو مشاكل تشغيلية' },
+                    { label: 'خدوش سطحية طفيفة', desc: 'استخدام طبيعي دون تأثير على الدقة' },
+                    { label: 'يحتاج إعادة معايرة دورية', desc: 'إرسال الجهاز لفريق الصيانة للمعايرة' },
+                    { label: 'تلف مادي أو كسر في الهيكل', desc: 'يتطلب رفع تقرير للجنة الإتلاف والمعمل' },
+                  ].map((cond) => {
+                    const isSelected = physicalCondition === cond.label;
+                    return (
+                      <button
+                        type="button"
+                        key={cond.label}
+                        onClick={() => setPhysicalCondition(cond.label)}
+                        className={`p-3 rounded-xl border text-start transition min-h-[44px] ${
+                          isSelected
+                            ? 'border-[#00236f] bg-sky-50 text-slate-900 ring-1 ring-[#00236f]'
+                            : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <div className="font-bold text-xs">{cond.label}</div>
+                        <div className="text-[11px] text-slate-400 mt-0.5">{cond.desc}</div>
+                      </button>
+                    );
+                  })}
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  {/* Step 1: Physical Match */}
-                  <div className="bg-slate-50 p-3.5 rounded-lg border border-slate-200 text-xs">
-                    <div className="font-bold text-[#00236f] mb-1">1. مطابقة الرقم التسلسلي واللوحة التعريفية:</div>
-                    <div className="flex items-center gap-4 text-slate-700">
-                      <span>الرقم المسجل بالعهد: <strong className="font-mono text-[#00236f]">{selectedLoan.assignedSerial}</strong></span>
-                      <span className="text-emerald-700 font-bold flex items-center gap-1">
-                        <Check className="w-4 h-4" />
-                        <span>مطابق للأصل</span>
-                      </span>
-                    </div>
-                  </div>
+              </div>
 
-                  {/* Step 2: Operational Status */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      2. الحالة الفنية والتشغيلية بعد الاختبار:
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setOperationalStatus('fully_operational')}
-                        className={`p-2.5 rounded text-xs font-bold border transition text-center ${
-                          operationalStatus === 'fully_operational'
-                            ? 'bg-emerald-50 border-emerald-400 text-emerald-800'
-                            : 'bg-white border-slate-200 text-slate-600'
-                        }`}
-                      >
-                        يعمل بكفاءة تامة
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setOperationalStatus('minor_maintenance')}
-                        className={`p-2.5 rounded text-xs font-bold border transition text-center ${
-                          operationalStatus === 'minor_maintenance'
-                            ? 'bg-amber-50 border-amber-400 text-amber-800'
-                            : 'bg-white border-slate-200 text-slate-600'
-                        }`}
-                      >
-                        يحتاج صيانة خفيفة
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setOperationalStatus('damaged')}
-                        className={`p-2.5 rounded text-xs font-bold border transition text-center ${
-                          operationalStatus === 'damaged'
-                            ? 'bg-red-50 border-red-400 text-red-800'
-                            : 'bg-white border-slate-200 text-slate-600'
-                        }`}
-                      >
-                        تالف / مفقود جزئياً
-                      </button>
-                    </div>
-                  </div>
+              {/* Accessories and Cleaning Checkboxes */}
+              <div className="space-y-2 pt-2 border-t border-slate-100">
+                <label className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer select-none transition">
+                  <input
+                    type="checkbox"
+                    checked={accessoriesIntact}
+                    onChange={(e) => setAccessoriesIntact(e.target.checked)}
+                    className="rounded text-[#0284c7] focus:ring-[#0284c7] w-4 h-4"
+                  />
+                  <span className="text-xs text-slate-800 font-medium">
+                    تم استلام كافة الكوابل، المحولات، والمجسات المرفقة دون نقص
+                  </span>
+                </label>
 
-                  {/* Step 3: Cosmetic Rating */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      3. التقييم الظاهري وخلو الهيكل من الصدمات:
-                    </label>
-                    <div className="flex gap-2">
-                      {(['A', 'B', 'C', 'Damaged'] as const).map((grade) => (
-                        <button
-                          key={grade}
-                          type="button"
-                          onClick={() => setConditionGrade(grade)}
-                          className={`flex-1 py-2 rounded text-xs font-bold border transition ${
-                            conditionGrade === grade
-                              ? 'bg-[#00236f] text-white border-[#00236f]'
-                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                          }`}
-                        >
-                          {grade === 'A' ? 'ممتاز (A)' : grade === 'B' ? 'جيد جداً (B)' : grade === 'C' ? 'مقبول (C)' : 'متضرر'}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                <label className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer select-none transition">
+                  <input
+                    type="checkbox"
+                    checked={cleanedAndCalibrated}
+                    onChange={(e) => setCleanedAndCalibrated(e.target.checked)}
+                    className="rounded text-[#0284c7] focus:ring-[#0284c7] w-4 h-4"
+                  />
+                  <span className="text-xs text-slate-800 font-medium">
+                    تم مسح البيانات التخزينية وإعادة ضبط إعدادات المصنع للجهاز
+                  </span>
+                </label>
+              </div>
 
-                  {/* Step 4: Notes */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      4. تقرير الفحص وملاحظات مهندس المعمل:
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={inspectionNotes}
-                      onChange={(e) => setInspectionNotes(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded text-xs outline-none focus:ring-1 focus:ring-[#0284c7]"
-                    />
-                  </div>
-                </div>
-              )}
+              {/* Inspection Notes */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  ملاحظات الفني المعملي (تُسجل في سجل الأصل):
+                </label>
+                <textarea
+                  value={inspectionNotes}
+                  onChange={(e) => setInspectionNotes(e.target.value)}
+                  placeholder="مثال: تم فحص دقة القياس وتعمل القنوات بكفاءة..."
+                  rows={2}
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:ring-2 focus:ring-[#0284c7] focus:outline-none"
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3">
+                <button
+                  onClick={handleExecuteReturn}
+                  className="w-full sm:flex-1 py-3 px-6 rounded-xl bg-[#00236f] hover:bg-[#001b55] text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition shadow-sm min-h-[48px]"
+                >
+                  <FileCheck className="w-4 h-4" />
+                  <span>إتمام الإرجاع وإصدار إخلاء الطرف الرقمي</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-semibold transition min-h-[48px]"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>طباعة الشهادة</span>
+                </button>
+              </div>
             </div>
           ) : (
-            <div className="text-center py-24 text-slate-400 text-xs">
-              حدد جهازاً مسترجعاً من القائمة لفحصه وإبراء الذمة
-            </div>
-          )}
-
-          {/* Action Footer */}
-          {selectedLoan && !clearanceDone && (
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-xs text-slate-500">
-                الفاحص: طارق العمري (رئيس فنيي المعامل)
-              </span>
-
-              <button
-                onClick={handleClearance}
-                className="bg-[#00236f] hover:bg-[#0284c7] text-white text-xs font-bold px-6 py-2.5 rounded transition flex items-center gap-2 shadow"
-              >
-                <Check className="w-4 h-4" />
-                <span>إبراء ذمة الطالب واعتماد الاستلام</span>
-              </button>
+            <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-400 space-y-3">
+              <Layers className="w-12 h-12 mx-auto text-slate-300" />
+              <h3 className="font-bold text-slate-700 text-sm">اختر عهدة من القائمة لبدء الفحص والاستلام</h3>
             </div>
           )}
         </div>
